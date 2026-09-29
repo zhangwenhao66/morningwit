@@ -1,6 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { sudokuSvg } from './diagram.ts';
+import { sudokuSvg, starBattleSvg, binairoSvg } from './diagram.ts';
+import { generateLogical as starPuzzle } from './starbattle-logic.ts';
+import { generateLogical as binPuzzle } from './binairo-logic.ts';
 
 test('sudoku diagram is well-formed and escapes text', () => {
 	const g = Array<number>(81).fill(0);
@@ -9,5 +11,25 @@ test('sudoku diagram is well-formed and escapes text', () => {
 	assert.ok(svg.startsWith('<svg') && svg.endsWith('</svg>'));
 	assert.ok(svg.includes('A &amp; B') && svg.includes('&lt;x&gt;'));
 	assert.equal((svg.match(/<circle/g) ?? []).length, 2);
+	assert.ok(!svg.includes('—') && !svg.includes('–'));
+});
+
+test('star battle diagram letters every region, draws stars and crosses, and has no dashes', () => {
+	const p = starPuzzle(6, 3);
+	const svg = starBattleSvg(p, { title: 'Board & stars', desc: 'x', stars: [[0, p.solution[0]]], crossed: [[1, 0]], highlight: [[2, 2]] });
+	assert.ok(svg.startsWith('<svg') && svg.endsWith('</svg>'));
+	assert.equal((svg.match(/<polygon/g) ?? []).length, 1);
+	for (let i = 0; i < 6; i++) assert.ok(svg.includes(`>${String.fromCharCode(65 + i)}</text>`), `region ${i} lettered`);
+	assert.ok(svg.includes('Board &amp; stars'));
+	assert.ok(!svg.includes('—') && !svg.includes('–'));
+});
+
+test('binairo diagram uses different shapes for the two symbols', () => {
+	const p = binPuzzle(6, 5);
+	const svg = binairoSvg(p.solution, { title: 't', desc: 'd', fixed: [[0, 0]], highlight: [[1, 1]] });
+	const suns = p.solution.flat().filter((v) => v === 1).length;
+	const moons = p.solution.flat().filter((v) => v === 0).length;
+	assert.equal((svg.match(/<circle/g) ?? []).length, suns);
+	assert.equal((svg.match(/A[\d.]+ [\d.]+ 0 1 0/g) ?? []).length, moons);
 	assert.ok(!svg.includes('—') && !svg.includes('–'));
 });
