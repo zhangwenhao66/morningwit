@@ -1,0 +1,3 @@
+# Site is not open to crawlers yet.
+User-agent: *
+Disallow: /

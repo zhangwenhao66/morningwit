@@ -1,0 +1,103 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TileArt from '../components/TileArt.astro';
+---
+<Layout>
+	<div class="wrap">
+		<div class="hello">
+			<div>
+				<h1 id="greeting">Good morning.</h1>
+				<p class="date" id="today-date">Your table is set.</p>
+			</div>
+			<span class="chip" id="streak-chip" hidden>
+				<svg aria-hidden="true"><use href="#i-sun"></use></svg>
+				<span id="streak-count">0</span><span id="streak-label"> day streak</span>
+			</span>
+		</div>
+
+		<h2 class="sr-only">Today's table</h2>
+		<div class="table-grid" id="table">
+			<a class="tile wide" href="/daily/" data-game="daily">
+				<div>
+					<TileArt kind="daily" />
+				</div>
+				<div class="tile-foot">
+					<div>
+						<h2>Morningwit Daily</h2>
+						<p>One fresh puzzle, the same for everyone. Finish it to keep your streak.</p>
+					</div>
+					<span class="status" data-state="new">Not started</span>
+				</div>
+			</a>
+			<a class="tile" href="/play/binairo/" data-game="binairo">
+				<TileArt kind="binairo" />
+				<div>
+					<h2>Binairo</h2>
+					<p>Suns and moons, no three alike.</p>
+					<div class="tile-foot" style="margin-top:10px">
+						<span class="status" data-state="new">Not started</span>
+						<span class="streak-note" data-streak hidden></span>
+					</div>
+				</div>
+			</a>
+			<a class="tile" href="/play/star-battle/" data-game="star-battle">
+				<TileArt kind="star" />
+				<div>
+					<h2>Star Battle</h2>
+					<p>One star each. No touching.</p>
+					<div class="tile-foot" style="margin-top:10px">
+						<span class="status" data-state="new">Not started</span>
+						<span class="streak-note" data-streak hidden></span>
+					</div>
+				</div>
+			</a>
+		</div>
+
+		<div class="section-head">
+			<h2>A small morning ritual</h2>
+			<p class="lede">
+				Morningwit is a quiet corner for logic puzzles. Play one with your coffee. When you get stuck, open a nudge, and if it is not enough, open the next one.
+				Nothing gets given away that you did not ask for.
+			</p>
+			<p><a class="btn" href="/fair-hints/">How hints work</a></p>
+		</div>
+	</div>
+	<script>
+		import { statusOf, streakOf } from '../scripts/store.ts';
+		import { todayKey } from '../lib/rng.ts';
+
+		const now = new Date();
+		const h = now.getHours();
+		const hello = h < 12 ? 'Good morning.' : h < 18 ? 'Good afternoon.' : 'Good evening.';
+		const g = document.getElementById('greeting');
+		if (g) g.textContent = hello;
+		const d = document.getElementById('today-date');
+		if (d) d.textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+		const key = todayKey(now);
+		document.querySelectorAll<HTMLElement>('.tile[data-game]').forEach((tile) => {
+			const game = tile.dataset.game!;
+			const st = statusOf(game, key);
+			const badge = tile.querySelector<HTMLElement>('.status');
+			if (badge) {
+				badge.dataset.state = st === 'done' ? 'done' : st === 'going' ? 'going' : 'new';
+				badge.textContent = st === 'done' ? 'Done today' : st === 'going' ? 'In progress' : 'Not started';
+			}
+			const n = streakOf(game, key);
+			const note = tile.querySelector<HTMLElement>('[data-streak]');
+			if (note && n > 0) {
+				note.hidden = false;
+				note.textContent = `${n}-day streak`;
+			}
+		});
+		const total = streakOf('all', key);
+		const chip = document.getElementById('streak-chip');
+		if (chip && total > 0) {
+			chip.hidden = false;
+			const c = document.getElementById('streak-count');
+			const l = document.getElementById('streak-label');
+			if (c) c.textContent = String(total);
+			if (l) l.textContent = total === 1 ? ' day streak' : ' day streak';
+		}
+	</script>
+</Layout>

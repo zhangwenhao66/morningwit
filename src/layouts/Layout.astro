@@ -1,0 +1,87 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Icons from '../components/Icons.astro';
+import Organization from '../../vendor/site-toolkit/packages/schema/src/Organization.astro';
+import WebSite from '../../vendor/site-toolkit/packages/schema/src/WebSite.astro';
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_ORIGIN, CONTACT_EMAIL, INDEXABLE } from '../consts';
+
+interface Props {
+	title?: string;
+	description?: string;
+	ogImage?: string;
+	noindex?: boolean;
+}
+
+const { title = SITE_TITLE, description = SITE_DESCRIPTION, ogImage = '/og.png', noindex = false } = Astro.props;
+const pageTitle = title === SITE_TITLE ? `${SITE_TITLE}: small logic puzzles, gentle hints` : `${title} | ${SITE_TITLE}`;
+const canonical = new URL(Astro.url.pathname, SITE_ORIGIN).href;
+const ogImageURL = new URL(ogImage, SITE_ORIGIN).href;
+const blocked = noindex || !INDEXABLE;
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#fffbf5" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="apple-touch-icon" href="/logo-512.png" />
+		<link rel="canonical" href={canonical} />
+		<link rel="alternate" type="application/rss+xml" title={`${SITE_TITLE} updates`} href="/rss.xml" />
+		<meta name="robots" content={blocked ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'} />
+		<title>{pageTitle}</title>
+		<meta name="description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={SITE_TITLE} />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImageURL} />
+		<meta property="og:url" content={canonical} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={pageTitle} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageURL} />
+		<Organization
+			name={SITE_TITLE}
+			url={`${SITE_ORIGIN}/`}
+			logo={`${SITE_ORIGIN}/logo-512.png`}
+			description="Morningwit publishes free logic puzzles and step-by-step hints for daily word and number puzzles."
+			email={CONTACT_EMAIL}
+		/>
+		<WebSite name={SITE_TITLE} url={`${SITE_ORIGIN}/`} description={SITE_DESCRIPTION} />
+		<script is:inline>
+			// Theme first, so the page never flashes the wrong palette.
+			try {
+				var t = localStorage.getItem('mw:v1:theme');
+				if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+			} catch (e) {}
+		</script>
+		<slot name="head" />
+	</head>
+	<body>
+		<Icons />
+		<Header />
+		<main id="main">
+			<slot />
+		</main>
+		<Footer />
+		<script is:inline>
+			(function () {
+				var btn = document.getElementById('theme-btn');
+				if (!btn) return;
+				btn.addEventListener('click', function () {
+					var root = document.documentElement;
+					var cur = root.getAttribute('data-theme');
+					if (!cur) cur = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+					var next = cur === 'dark' ? 'light' : 'dark';
+					root.setAttribute('data-theme', next);
+					try {
+						localStorage.setItem('mw:v1:theme', next);
+					} catch (e) {}
+				});
+			})();
+		</script>
+	</body>
+</html>

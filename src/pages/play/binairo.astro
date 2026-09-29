@@ -1,0 +1,94 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GameFrame from '../../components/GameFrame.astro';
+import FAQPage from '../../../vendor/site-toolkit/packages/schema/src/FAQPage.astro';
+
+const faq = [
+	{
+		question: 'What are the rules of Binairo?',
+		answer:
+			'Fill every square with a sun or a moon. No more than two of the same symbol may sit next to each other in a row or column. Every row and every column holds the same number of suns and moons. No two rows are identical, and no two columns are identical.',
+	},
+	{
+		question: 'Is Binairo the same as Takuzu or Binary Puzzle?',
+		answer: 'Yes. The rules are the same. Different publishers use 0 and 1, black and white, or suns and moons.',
+	},
+	{
+		question: 'Does every puzzle have exactly one solution?',
+		answer:
+			'Yes. Each board is checked by a solver before you see it, so there is one answer and it can be reached by logic. No guessing is required.',
+	},
+	{
+		question: 'Is my progress saved?',
+		answer: 'Your board, timer and streak are saved in your own browser. Nothing is sent to a server, and clearing site data removes it.',
+	},
+];
+---
+<Layout
+	title="Binairo: free logic puzzle with step-by-step hints"
+	description="Play Binairo free: fill the grid with suns and moons, no three in a row. Three sizes, three difficulties, undo, keyboard play, and hints that open one layer at a time."
+>
+	<div class="wrap">
+		<div class="game-head">
+			<h1>Binairo</h1>
+			<p>Suns and moons. No three alike in a row, and every row and column balanced.</p>
+		</div>
+		<GameFrame
+			sizes={[6, 8, 10]}
+			diffs={['easy', 'medium', 'hard']}
+			nudge1="Tap for a place to look"
+			nudge2="Tap for the rule to use"
+			nudge3="Tap to reveal one cell"
+		>
+			<ul class="legend" slot="legend">
+				<li><svg class="sun" aria-hidden="true"><use href="#i-sun"></use></svg>Sun (key 1 or S)</li>
+				<li><svg class="moon" aria-hidden="true"><use href="#i-moon"></use></svg>Moon (key 0 or M)</li>
+				<li>Tap a square to cycle sun, moon, empty.</li>
+				<li>Striped red squares break a rule right now.</li>
+				<li>Arrow keys move, Backspace clears, Ctrl or ⌘ + Z undoes.</li>
+			</ul>
+		</GameFrame>
+	</div>
+	<div class="wrap-narrow prose">
+		<h2>How to play Binairo</h2>
+		<p>Every square holds a sun or a moon. Three rules decide where they go.</p>
+		<ol>
+			<li>No more than two of the same symbol in a row, across or down.</li>
+			<li>Each row and each column has the same number of suns and moons. On an 8×8 board that is four of each.</li>
+			<li>No two rows match exactly, and no two columns match exactly.</li>
+		</ol>
+		<p>The squares that start filled are locked. Everything else is yours to fill in, change and undo.</p>
+
+		<h2>Three moves that solve most boards</h2>
+		<ul>
+			<li><strong>Pairs need a cap.</strong> If two suns sit side by side, the squares on both ends must be moons.</li>
+			<li><strong>Sandwiches.</strong> If a sun, an empty square and another sun line up, the middle one has to be a moon.</li>
+			<li><strong>Count the row.</strong> When a row already holds its full share of suns, every empty square left in it is a moon. Run the same check on columns.</li>
+		</ul>
+		<p>
+			When those stop working, look at rows that are nearly finished. If two rows could only differ in one place and one of them is already
+			complete, the almost-finished twin has to break the tie.
+		</p>
+
+		<div class="note">
+			<strong>Hints here are layered on purpose.</strong> The first nudge points at a row. The second names the rule. Only the third gives you a cell.
+			More on that in <a href="/fair-hints/">how hints work</a>.
+		</div>
+
+		<h2>Questions</h2>
+		<div class="faq">
+			{faq.map((f) => (
+				<details>
+					<summary>{f.question}</summary>
+					<p>{f.answer}</p>
+				</details>
+			))}
+		</div>
+	</div>
+	<FAQPage items={faq} />
+	<script>
+		import { mountBinairo } from '../../scripts/binairo-ui.ts';
+		const root = document.getElementById('game');
+		if (root) mountBinairo(root);
+	</script>
+</Layout>

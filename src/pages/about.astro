@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { CONTACT_EMAIL } from '../consts';
+---
+<Layout title="About Morningwit" description="Morningwit is an independent site for small logic puzzles and gentle, layered hints. Here is how the puzzles are made and what the site does and does not do.">
+	<div class="wrap-narrow prose">
+		<h1>About Morningwit</h1>
+		<p>
+			Morningwit is a small, independent puzzle site. It has two jobs. The first is to give you logic puzzles you can play in a few quiet minutes.
+			The second is to help when a daily word or number puzzle has you stuck, without handing you the answer before you want it.
+		</p>
+
+		<h2>How the puzzles are made</h2>
+		<p>
+			Every board on Morningwit is built by our own code. The generator makes a complete solution first, then removes clues one at a time. After each removal
+			a solver checks that exactly one solution is left. If removing a clue would open up a second answer, the clue stays.
+			That is why a board never asks you to guess: there is always a path of plain logic to the end.
+		</p>
+		<p>
+			The daily puzzle is built from the date, so everyone who opens it on the same day gets the same board. There is no account and no leaderboard.
+		</p>
+
+		<h2>What we keep, and what we do not</h2>
+		<p>
+			Your progress, timer setting and streak live in your own browser. We do not ask you to sign up, and the boards you play are not sent anywhere.
+			Details are on the <a href="/privacy/">privacy page</a>.
+		</p>
+
+		<h2>Hints for other puzzles</h2>
+		<p>
+			Hints for well-known daily puzzles follow the same rule as our own games: a nudge first, the reasoning second, the answer last.
+			Read <a href="/fair-hints/">how hints work</a> for the details.
+		</p>
+
+		<div class="note">
+			Morningwit is not affiliated with, endorsed by, or connected to The New York Times or any other puzzle publisher. Game names such as Connections, Strands,
+			Spelling Bee, Letter Boxed and Wordle belong to their owners. We use those names only to say which puzzle a hint is about.
+		</div>
+
+		<h2>Contact</h2>
+		<p>
+			Found a bug, a board that felt unfair, or a hint that gave too much away? Write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+		</p>
+	</div>
+</Layout>

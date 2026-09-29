@@ -1,0 +1,35 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import TileArt from '../../components/TileArt.astro';
+---
+<Layout
+	title="Free logic puzzles to play"
+	description="Play Binairo and Star Battle free in your browser. No sign-up, undo and keyboard play built in, and hints that open one layer at a time."
+>
+	<div class="wrap">
+		<div class="game-head">
+			<h1>Games</h1>
+			<p>Each puzzle has a fresh board for today and as many extra boards as you like.</p>
+		</div>
+		<div class="table-grid">
+			<a class="tile" href="/play/binairo/">
+				<TileArt kind="binairo" />
+				<div>
+					<h2>Binairo</h2>
+					<p>Fill the grid with suns and moons. No three alike in a row, and every row and column balanced. 6×6, 8×8 and 10×10.</p>
+				</div>
+			</a>
+			<a class="tile" href="/play/star-battle/">
+				<TileArt kind="star" />
+				<div>
+					<h2>Star Battle</h2>
+					<p>One star in every row, column and region. Stars may not touch, even at a corner. Boards from 6×6 to 9×9.</p>
+				</div>
+			</a>
+		</div>
+		<div class="section-head">
+			<h2>More on the way</h2>
+			<p class="lede">Samurai Sudoku, KenKen and Hitori are next. They will appear here once each one plays well on a phone.</p>
+		</div>
+	</div>
+</Layout>

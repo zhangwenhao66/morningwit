@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { CONTACT_EMAIL } from '../consts';
+---
+<Layout title="Privacy" description="Morningwit keeps your puzzle progress in your own browser. This page says exactly what is stored and what is not." noindex>
+	<div class="wrap-narrow prose">
+		<h1>Privacy</h1>
+		<p><em>Last updated September 29, 2026.</em></p>
+
+		<h2>What stays in your browser</h2>
+		<p>
+			To remember your boards, timer preference, colour theme and streaks, Morningwit uses your browser's local storage. That data lives on your device.
+			It is not sent to us. Clearing site data in your browser removes it.
+		</p>
+
+		<h2>What we collect</h2>
+		<p>
+			We do not ask for an account, a name or an email address to play. We do not run advertising or ad tracking on this site.
+			Like any website, our host may keep standard server logs, such as request time and IP address, for security and to keep the site running.
+		</p>
+
+		<h2>Cookies</h2>
+		<p>Morningwit does not set cookies of its own.</p>
+
+		<h2>Changes</h2>
+		<p>If this changes, for example if ads or analytics are added later, this page will be updated first and will say so plainly.</p>
+
+		<h2>Questions</h2>
+		<p>Write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+	</div>
+</Layout>

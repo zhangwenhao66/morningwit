@@ -1,0 +1,58 @@
+---
+interface Props {
+	sizes?: number[];
+	diffs?: string[];
+	daily?: boolean;
+	nudge1: string;
+	nudge2: string;
+	nudge3: string;
+}
+const { sizes = [], diffs = [], daily = false, nudge1, nudge2, nudge3 } = Astro.props;
+---
+<div class="game-frame" id="game">
+	<section class="stage" aria-label="Puzzle board">
+		{!daily && (
+			<div class="setup">
+				{sizes.length > 0 && (
+					<div class="seg" id="seg-size" role="group" aria-label="Board size">
+						{sizes.map((s) => <button type="button" data-v={s} aria-pressed="false">{s}×{s}</button>)}
+					</div>
+				)}
+				{diffs.length > 0 && (
+					<div class="seg" id="seg-diff" role="group" aria-label="Difficulty">
+						{diffs.map((d) => <button type="button" data-v={d} aria-pressed="false">{d[0].toUpperCase() + d.slice(1)}</button>)}
+					</div>
+				)}
+				<button class="btn" id="todays" type="button">Today's puzzle</button>
+				<button class="btn" id="new-puzzle" type="button"><svg aria-hidden="true"><use href="#i-shuffle"></use></svg>New puzzle</button>
+			</div>
+		)}
+		<div class="banner" id="banner" role="status" aria-live="polite"></div>
+		<div class="toolbar">
+			<button class="btn" id="undo" type="button"><svg aria-hidden="true"><use href="#i-undo"></use></svg>Undo</button>
+			<button class="btn" id="clear" type="button">Start over</button>
+			<span class="grow"></span>
+			<span class="readout"><span id="stat-line"></span></span>
+			<button class="btn" id="timer-toggle" type="button" aria-pressed="true" aria-label="Hide timer"><svg aria-hidden="true"><use href="#i-timer"></use></svg><span id="timer-readout">0:00</span></button>
+		</div>
+		<div class="board-wrap">
+			<div class="board" id="board"></div>
+		</div>
+		<noscript><p>This puzzle needs JavaScript to run. Nothing is sent anywhere; your progress stays in your browser.</p></noscript>
+	</section>
+	<aside class="side">
+		<div class="panel">
+			<h2>Nudges</h2>
+			<p class="sub">Stuck? Open them one at a time. Each one says a little more, and none opens until you ask.</p>
+			<div class="hint-stack" id="hints">
+				<button type="button" class="hint-card" data-level="1" data-covered="true"><span class="tag">Nudge 1 · where to look</span><span class="cover">{nudge1}</span><span class="body"></span></button>
+				<button type="button" class="hint-card" data-level="2" data-covered="true" disabled><span class="tag">Nudge 2 · what to think</span><span class="cover">{nudge2}</span><span class="body"></span></button>
+				<button type="button" class="hint-card" data-level="3" data-covered="true" disabled><span class="tag">Nudge 3 · the answer for one cell</span><span class="cover">{nudge3}</span><span class="body"></span></button>
+			</div>
+		</div>
+		<div class="panel">
+			<h2>Reading the board</h2>
+			<slot name="legend" />
+		</div>
+	</aside>
+</div>

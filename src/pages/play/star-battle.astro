@@ -1,0 +1,91 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GameFrame from '../../components/GameFrame.astro';
+import FAQPage from '../../../vendor/site-toolkit/packages/schema/src/FAQPage.astro';
+
+const faq = [
+	{
+		question: 'What are the rules of Star Battle?',
+		answer:
+			'Place stars so that every row, every column and every bold-outlined region holds exactly one star. Two stars may never touch, not even diagonally.',
+	},
+	{
+		question: 'What do the dots do?',
+		answer:
+			'Tap a square once to drop a dot, which is your own note that no star goes there. Tap again for a star. Dots are never checked, so use them freely.',
+	},
+	{
+		question: 'Are there bigger versions with two stars per row?',
+		answer:
+			'Yes, larger boards often use two stars per row, column and region. The boards here use one star each, which is the friendliest way in.',
+	},
+	{
+		question: 'Does each board have one answer?',
+		answer: 'Yes. A solver checks every board before you see it, so there is exactly one solution.',
+	},
+];
+---
+<Layout
+	title="Star Battle puzzle: play free with layered hints"
+	description="Play Star Battle free: one star in every row, column and region, and no two stars touching. Four board sizes, undo, keyboard play, and hints that reveal one layer at a time."
+>
+	<div class="wrap">
+		<div class="game-head">
+			<h1>Star Battle</h1>
+			<p>One star per row, column and region. Stars never touch.</p>
+		</div>
+		<GameFrame
+			sizes={[6, 7, 8, 9]}
+			nudge1="Tap for a place to look"
+			nudge2="Tap for how to think about it"
+			nudge3="Tap to reveal one star"
+		>
+			<ul class="legend" slot="legend">
+				<li><svg aria-hidden="true"><use href="#i-star"></use></svg>Star (key S)</li>
+				<li><span class="dot" style="width:10px;height:10px;border-radius:50%;background:currentColor;opacity:.6;margin:6px"></span>Dot: no star here (key D)</li>
+				<li>Tap once for a dot, twice for a star, three times to clear.</li>
+				<li>Bold lines are region borders. Each region has a small letter in one corner so hints can name it.</li>
+				<li>Striped red squares break a rule right now.</li>
+			</ul>
+		</GameFrame>
+	</div>
+	<div class="wrap-narrow prose">
+		<h2>How to play Star Battle</h2>
+		<p>The board is cut into coloured regions by bold lines. You place stars under three rules.</p>
+		<ol>
+			<li>Each row has exactly one star.</li>
+			<li>Each column has exactly one star.</li>
+			<li>Each region has exactly one star.</li>
+		</ol>
+		<p>On top of that, no two stars can touch, and that includes corners.</p>
+
+		<h2>Where to start</h2>
+		<ul>
+			<li><strong>Small regions first.</strong> A region with only two or three squares has very few places for its star. Try them before anything else.</li>
+			<li><strong>Every star casts a shadow.</strong> Once a star is down, its whole row and column, its region, and the eight squares around it are off limits. Dot them.</li>
+			<li><strong>Fully trapped regions.</strong> If a region sits entirely inside one row, that row's star belongs to the region, so the rest of the row can be dotted out.</li>
+			<li><strong>Borrowing.</strong> When two regions together occupy only two rows, those two rows spend their stars on them. Nothing else in those rows can hold one.</li>
+		</ul>
+
+		<div class="note">
+			<strong>Hints name the tightest region.</strong> Nudge 1 says which region to look at, nudge 2 says how many places it has left and which row its star sits in,
+			and nudge 3 gives the square. If one of your stars is wrong, the hints say so before anything else. See <a href="/fair-hints/">how hints work</a>.
+		</div>
+
+		<h2>Questions</h2>
+		<div class="faq">
+			{faq.map((f) => (
+				<details>
+					<summary>{f.question}</summary>
+					<p>{f.answer}</p>
+				</details>
+			))}
+		</div>
+	</div>
+	<FAQPage items={faq} />
+	<script>
+		import { mountStarBattle } from '../../scripts/starbattle-ui.ts';
+		const root = document.getElementById('game');
+		if (root) mountStarBattle(root);
+	</script>
+</Layout>

@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+import GameFrame from '../components/GameFrame.astro';
+---
+<Layout
+	title="Morningwit Daily: one logic puzzle a day"
+	description="One fresh logic puzzle every day, the same for everyone. It alternates between Binairo and Star Battle, and keeps your streak."
+>
+	<div class="wrap">
+		<div class="game-head">
+			<h1 id="daily-title">Morningwit Daily</h1>
+			<p id="daily-sub">One puzzle a day, the same for everyone. It alternates between Binairo and Star Battle.</p>
+		</div>
+		<GameFrame daily nudge1="Tap for a place to look" nudge2="Tap for the rule to use" nudge3="Tap to reveal one cell">
+			<ul class="legend" slot="legend" id="daily-legend"></ul>
+		</GameFrame>
+	</div>
+	<div class="wrap-narrow prose">
+		<h2>How the daily works</h2>
+		<p>
+			A new board appears each morning at your local midnight. Every player gets the same board on the same date, because it is built from the date itself.
+			The game alternates from one day to the next, so a Binairo is usually followed by a Star Battle.
+		</p>
+		<p>
+			Finish it and the streak on the <a href="/">Today</a> page goes up by one. Miss a day and it starts again. Your streak lives in this browser only.
+		</p>
+	</div>
+	<script>
+		import { mountBinairo } from '../scripts/binairo-ui.ts';
+		import { mountStarBattle } from '../scripts/starbattle-ui.ts';
+		import { todayKey } from '../lib/rng.ts';
+
+		const root = document.getElementById('game');
+		if (root) {
+			const key = todayKey();
+			const [y, m, d] = key.split('-').map(Number);
+			const dayNumber = Math.floor(Date.UTC(y, m - 1, d) / 86400000);
+			const useBinairo = dayNumber % 2 === 0;
+			const title = document.getElementById('daily-title');
+			const sub = document.getElementById('daily-sub');
+			const legend = document.getElementById('daily-legend');
+			if (useBinairo) {
+				if (title) title.textContent = 'Morningwit Daily: Binairo';
+				if (sub) sub.textContent = 'Suns and moons. No three alike in a row, every row and column balanced.';
+				if (legend)
+					legend.innerHTML =
+						'<li><svg class="sun" aria-hidden="true"><use href="#i-sun"></use></svg>Sun (key 1 or S)</li><li><svg class="moon" aria-hidden="true"><use href="#i-moon"></use></svg>Moon (key 0 or M)</li><li>Tap a square to cycle sun, moon, empty.</li><li>Striped red squares break a rule right now.</li>';
+				mountBinairo(root, { daily: true });
+			} else {
+				if (title) title.textContent = 'Morningwit Daily: Star Battle';
+				if (sub) sub.textContent = 'One star per row, column and region. Stars never touch.';
+				if (legend)
+					legend.innerHTML =
+						'<li><svg aria-hidden="true"><use href="#i-star"></use></svg>Star (key S)</li><li>Tap once for a dot, twice for a star, three times to clear.</li><li>Small letters name the regions for hints.</li><li>Striped red squares break a rule right now.</li>';
+				mountStarBattle(root, { daily: true });
+			}
+		}
+	</script>
+</Layout>
