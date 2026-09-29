@@ -100,14 +100,86 @@ function growRegions(n: number, stars: number[], rng: Rng): number[][] {
 	return reg;
 }
 
+function regionSizes(regions: number[][]): number[] {
+	const sizes = Array<number>(regions.length).fill(0);
+	for (const row of regions) for (const g of row) sizes[g]++;
+	return sizes;
+}
+
+/** Would region `g` stay in one piece if cell (r, c) were taken out of it? */
+function staysConnected(regions: number[][], g: number, r: number, c: number): boolean {
+	const n = regions.length;
+	let start: [number, number] | null = null;
+	let total = 0;
+	for (let i = 0; i < n; i++)
+		for (let j = 0; j < n; j++)
+			if (regions[i][j] === g && !(i === r && j === c)) {
+				total++;
+				if (!start) start = [i, j];
+			}
+	if (!start) return false;
+	const seen = new Set<number>([start[0] * n + start[1]]);
+	const stack: Array<[number, number]> = [start];
+	while (stack.length) {
+		const [i, j] = stack.pop()!;
+		for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+			const a = i + di;
+			const b = j + dj;
+			if (a < 0 || b < 0 || a >= n || b >= n || (a === r && b === c) || regions[a][b] !== g || seen.has(a * n + b)) continue;
+			seen.add(a * n + b);
+			stack.push([a, b]);
+		}
+	}
+	return seen.size === total;
+}
+
+/**
+ * Random growth rarely leaves exactly one solution once regions have a sensible
+ * size, and near-equal regions never do (tested 2026-09-29). So: start from random
+ * regions and nudge border squares between neighbours, keeping a move whenever the
+ * number of solutions does not go up, until exactly one is left.
+ * Every region keeps at least two squares (a one-square region is a free star) and
+ * stays in one piece. Star squares never change region.
+ */
+function refine(regions: number[][], stars: number[], rng: Rng): boolean {
+	const n = regions.length;
+	const minSize = 2;
+	const maxSize = n * 3;
+	const sizes = regionSizes(regions);
+	let cur = countSolutions(regions, 40);
+	for (let step = 0; step < 900 && cur > 1; step++) {
+		const r = Math.floor(rng() * n);
+		const c = Math.floor(rng() * n);
+		if (stars[r] === c) continue;
+		const from = regions[r][c];
+		const options = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+			.map(([dr, dc]) => [r + dr, c + dc])
+			.filter(([a, b]) => a >= 0 && b >= 0 && a < n && b < n && regions[a][b] !== from);
+		if (options.length === 0) continue;
+		const [a, b] = options[Math.floor(rng() * options.length)];
+		const to = regions[a][b];
+		if (sizes[from] <= minSize || sizes[to] >= maxSize || !staysConnected(regions, from, r, c)) continue;
+		regions[r][c] = to;
+		const next = countSolutions(regions, 40);
+		if (next <= cur) {
+			cur = next;
+			sizes[from]--;
+			sizes[to]++;
+		} else regions[r][c] = from;
+	}
+	return cur === 1;
+}
+
 /** Deterministic: the same seed always yields the same puzzle. */
 export function generate(size: number, seed: number): StarPuzzle {
-	for (let attempt = 0; attempt < 5000; attempt++) {
+	for (let attempt = 0; attempt < 400; attempt++) {
 		const rng = makeRng((seed + attempt * 7919) >>> 0);
 		const stars = randomPlacement(size, rng);
 		if (!stars) continue;
 		const regions = growRegions(size, stars, rng);
-		if (countSolutions(regions, 2) === 1) return { size, regions, solution: stars };
+		const sizes = regionSizes(regions);
+		if (sizes.some((x) => x < 2)) continue;
+		if (refine(regions, stars, rng) && countSolutions(regions, 2) === 1) return { size, regions, solution: stars };
 	}
 	throw new Error(`no unique Star Battle found for size ${size} seed ${seed}`);
 }

@@ -68,3 +68,13 @@ test('hints escalate and stay consistent with the solution', () => {
 	wrong[0][c] = 1;
 	assert.match(nextHint(p, wrong, 1).message, /wrong place/);
 });
+
+test('no one-square or board-swallowing regions', () => {
+	for (const [size, seed] of [[6, 1], [7, 2], [8, 3], [9, 4], [8, 20260929]] as const) {
+		const p = generate(size, seed);
+		const sizes = Array<number>(size).fill(0);
+		for (const row of p.regions) for (const g of row) sizes[g]++;
+		assert.ok(Math.min(...sizes) >= 2, `size ${size}: ${sizes}`);
+		assert.ok(Math.max(...sizes) <= size * 3, `size ${size}: ${sizes}`);
+	}
+});
