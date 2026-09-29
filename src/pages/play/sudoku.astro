@@ -7,7 +7,7 @@ const faq = [
 	{
 		question: 'What do the difficulty levels mean?',
 		answer:
-			'Easy boards can be finished with singles alone. Medium boards also need locked candidates or pairs. Hard boards go further, and some need an X-Wing. The label is the hardest technique the board needs, not how many clues it starts with.',
+			'Easy boards need only singles and start with 40 clues. Medium boards start with 32 and add locked candidates, and about a quarter also need a pair. Hard boards start with 26 to 28 clues and nearly all need pairs or triples. About 1 in 30 needs an X-Wing.',
 	},
 	{
 		question: 'Will I ever have to guess?',
@@ -21,7 +21,7 @@ const faq = [
 	},
 	{
 		question: 'Is my progress saved?',
-		answer: 'Your board, notes, timer and streak are saved in your own browser. Nothing is sent to a server.',
+		answer: 'Your board, notes, timer and streak stay in your own browser.',
 	},
 ];
 ---
@@ -32,7 +32,7 @@ const faq = [
 	<div class="wrap">
 		<div class="game-head">
 			<h1>Sudoku</h1>
-			<p>Classic 9×9, with hints that name the technique instead of just giving the digit.</p>
+			<p>Classic 9×9, with hints that name the technique instead of giving the digit.</p>
 		</div>
 		<GameFrame diffs={['easy', 'medium', 'hard']} nudge1="Tap for a place to look" nudge2="Tap for what to notice" nudge3="Tap for the technique and the answer">
 			<div class="pad-wrap" slot="pad">
@@ -60,11 +60,11 @@ const faq = [
 		<h2>The techniques behind the hints</h2>
 		<p>Each hint is one step a person could take, named after the pattern it uses.</p>
 		<ul>
-			<li>Naked single. A square has only one digit left after you cross off everything in its row, column and box.</li>
-			<li>Hidden single. In a row, column or box, a digit has only one square where it can go.</li>
-			<li>Pointing and claiming. A digit is stuck in one line inside a box, or in one box inside a line, which clears that digit from the rest of the line or box.</li>
-			<li>Pairs and triples. Two or three squares in a unit share only that many digits, so those digits leave the other squares.</li>
-			<li>X-Wing. A digit has just two places in each of two rows, and the places line up in the same two columns. The digit is then gone from everything else in those columns.</li>
+			<li>Naked single: a square has only one digit left after you cross off everything in its row, column and box.</li>
+			<li>Hidden single: in a row, column or box, a digit has only one square where it can go.</li>
+			<li>Pointing and claiming: a digit is stuck in one line inside a box, or in one box inside a line, which clears that digit from the rest of the line or box.</li>
+			<li>Pairs and triples: two or three squares in a unit share only that many digits, so those digits leave the other squares.</li>
+			<li>X-Wing: a digit has just two places in each of two rows, and the places line up in the same two columns. The digit is then gone from everything else in those columns. There is a <a href="/learn/x-wing-sudoku/">worked example</a> with pictures.</li>
 		</ul>
 		<div class="note">
 			Hints open in three layers so you only take what you want. If your board already breaks a rule, the hints say so first. See <a href="/fair-hints/">how hints work</a>.
