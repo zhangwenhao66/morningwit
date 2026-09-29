@@ -1,5 +1,5 @@
 ---
-import { CONTACT_EMAIL } from '../consts';
+import { ADS_ENABLED } from '../consts';
 import { guides } from '../data/guides';
 ---
 <footer class="foot">
@@ -11,6 +11,7 @@ import { guides } from '../data/guides';
 			<a href="/privacy/">Privacy</a>
 			<a href="/terms/">Terms</a>
 			<a href="/contact/">Contact</a>
+			{ADS_ENABLED && <button type="button" class="foot-btn" data-consent-open>Ad choices</button>}
 		</div>
 		<p class="disclaimer">
 			Morningwit is an independent project and is not affiliated with, endorsed by, or connected to The New York Times or any puzzle publisher.

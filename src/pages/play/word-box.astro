@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import AdSlot from '../../components/AdSlot.astro';
 import FAQPage from '../../../vendor/site-toolkit/packages/schema/src/FAQPage.astro';
 
 const faq = [
@@ -88,6 +89,7 @@ const faq = [
 		<p>The familiarity mark comes from checking each word against a pronunciation dictionary. A word missing from it may still be valid. It just ranks lower, because it is less likely to be one you would use.</p>
 		<h2>About the word list</h2>
 		<p>Suggestions come from <a href="http://wiki.puzzlers.org/dokuwiki/doku.php?id=solving:wordlists:about:enable_readme">ENABLE</a>, a word list compiled by Alan Beale and released into the public domain. Words with a doubled letter are left out, because a double letter would sit on one side twice. The familiarity mark uses the <a href="https://www.speech.cs.cmu.edu/cgi-bin/cmudict">CMU Pronouncing Dictionary</a>, and only as a yes-or-no flag.</p>
+		<AdSlot kind="rect" />
 		<h2>Questions</h2>
 		<div class="faq">
 			{faq.map((f) => (

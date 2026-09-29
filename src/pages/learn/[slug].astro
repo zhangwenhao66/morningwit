@@ -4,6 +4,7 @@ import Article from '../../../vendor/site-toolkit/packages/schema/src/Article.as
 import BreadcrumbList from '../../../vendor/site-toolkit/packages/schema/src/BreadcrumbList.astro';
 import FAQPage from '../../../vendor/site-toolkit/packages/schema/src/FAQPage.astro';
 import { guides, categorySlug } from '../../data/guides';
+import AdSlot from '../../components/AdSlot.astro';
 import { renderInline } from '../../lib/inline';
 import { SITE_TITLE, SITE_ORIGIN } from '../../consts';
 
@@ -33,7 +34,8 @@ const fmt = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US'
 			<p set:html={renderInline(guide.coreSummary)} />
 		</aside>
 
-		{guide.sections.map((s) => (
+		{guide.sections.map((s, i) => (
+			<>
 			<section>
 				<h2>{s.heading}</h2>
 				{s.body.map((p) => <p set:html={renderInline(p)} />)}
@@ -44,7 +46,11 @@ const fmt = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US'
 					</figure>
 				)}
 			</section>
+			{guide.sections.length >= 4 && i === 1 && <AdSlot kind="rect" />}
+			</>
 		))}
+
+		<AdSlot kind="native" />
 
 		{guide.faq && guide.faq.length > 0 && (
 			<section class="faq">

@@ -1,0 +1,27 @@
+---
+import { ADS_ENABLED, NATIVE_ADS, ADSTERRA } from '../consts';
+
+interface Props {
+	kind: 'rect' | 'native';
+}
+const { kind } = Astro.props;
+const { nativeHost, nativeKey, rectKey } = ADSTERRA;
+// The scripts stay inert (type text/plain) until the consent script in Layout.astro switches them on.
+---
+{ADS_ENABLED && (kind === 'rect' || NATIVE_ADS) && (
+	<aside class={`ad ad-${kind}`} aria-label="Advertisement">
+		<span class="ad-label">Advertisement</span>
+		{kind === 'rect' && (
+			<div class="ad-box">
+				<script is:inline type="text/plain" data-ads set:html={`atOptions = { 'key': '${rectKey}', 'format': 'iframe', 'height': 250, 'width': 300, 'params': {} };`}></script>
+				<script is:inline type="text/plain" data-ads src={`https://www.highrevenueformat.com/${rectKey}/invoke.js`}></script>
+			</div>
+		)}
+		{kind === 'native' && (
+			<div class="ad-box">
+				<script is:inline type="text/plain" data-ads async data-cfasync="false" src={`https://${nativeHost}/${nativeKey}/invoke.js`}></script>
+				<div id={`container-${nativeKey}`}></div>
+			</div>
+		)}
+	</aside>
+)}
