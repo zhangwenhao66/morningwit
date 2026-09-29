@@ -16,7 +16,7 @@ const faq = [
 	{
 		question: 'Does every puzzle have exactly one solution?',
 		answer:
-			'Yes. Each board is checked by a solver before you see it, so there is one answer and it can be reached by logic. No guessing is required.',
+			'Yes. A solver checks each board before you see it, so exactly one answer fits. We have not rated how much reasoning each board takes, so on the harder settings you may sometimes have to try a square and see what breaks.',
 	},
 	{
 		question: 'Is my progress saved?',
@@ -59,19 +59,19 @@ const faq = [
 		</ol>
 		<p>The squares that start filled are locked. Everything else is yours to fill in, change and undo.</p>
 
-		<h2>Three moves that solve most boards</h2>
+		<h2>Three moves worth knowing</h2>
 		<ul>
-			<li><strong>Pairs need a cap.</strong> If two suns sit side by side, the squares on both ends must be moons.</li>
-			<li><strong>Sandwiches.</strong> If a sun, an empty square and another sun line up, the middle one has to be a moon.</li>
-			<li><strong>Count the row.</strong> When a row already holds its full share of suns, every empty square left in it is a moon. Run the same check on columns.</li>
+			<li>Pairs need a cap. If two suns sit side by side, the squares on both ends must be moons.</li>
+			<li>Sandwiches. If a sun, an empty square and another sun line up, the middle one has to be a moon.</li>
+			<li>Count the row. When a row already holds its full share of suns, every empty square left in it is a moon. Run the same check on columns.</li>
 		</ul>
 		<p>
-			When those stop working, look at rows that are nearly finished. If two rows could only differ in one place and one of them is already
-			complete, the almost-finished twin has to break the tie.
+			When those run dry, check for twins. If another row already matches a finished row everywhere except two empty squares, those two squares
+			cannot both take the copying values.
 		</p>
 
 		<div class="note">
-			<strong>Hints here are layered on purpose.</strong> The first nudge points at a row. The second names the rule. Only the third gives you a cell.
+			Hints here are layered on purpose. The first nudge points at a row. The second names the rule. Only the third gives you a cell.
 			More on that in <a href="/fair-hints/">how hints work</a>.
 		</div>
 
