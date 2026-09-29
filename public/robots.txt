@@ -1,3 +1,4 @@
-# Site is not open to crawlers yet.
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://morningwit.com/sitemap-index.xml

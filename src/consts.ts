@@ -6,10 +6,10 @@ export const SITE_ORIGIN = 'https://morningwit.com';
 export const CONTACT_EMAIL = 'contact@morningwit.com';
 
 /**
- * Flip to true when the custom domain is live and Owen has approved launch.
- * While false: every page carries noindex and robots.txt disallows everything.
+ * When false, every page carries noindex (and public/robots.txt should disallow everything).
+ * Flipped to true on 2026-09-29 after Owen approved the look and the custom domain went live.
  */
-export const INDEXABLE = false;
+export const INDEXABLE = true;
 
 /** No ad code is loaded anywhere. AdSense is on hold (account rejected 2026-09-06). */
 export const ADS_ENABLED = false;
