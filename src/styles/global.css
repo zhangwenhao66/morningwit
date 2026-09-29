@@ -993,8 +993,28 @@ a:hover {
 }
 
 @media (max-width: 520px) {
+	/* Phones: give the board every spare pixel. The frame bleeds 6px past the page gutter, the frame
+	   padding and board padding shrink, and the gap drops to 2px. On a 375px screen that takes 8x8 cells
+	   from 36px to 40px and 10x10 from 28px to 31px. 10 columns cannot reach the 44px comfort size on a
+	   phone without scrolling sideways, so this is the most the layout can give. */
+	.game-frame {
+		margin-inline: -6px;
+	}
+	.stage {
+		padding: 6px;
+	}
 	.board {
-		--cell: min(calc((100vw - 68px - 3px * (var(--n) - 1)) / var(--n)), 56px);
+		--cell: min(calc((100vw - 44px - 2px * (var(--n) - 1)) / var(--n)), 56px);
+		gap: 2px;
+		padding: 5px;
+	}
+	.board.sudoku {
+		--cell: min(calc((100vw - 42px) / 9), 52px);
+		gap: 0;
+		padding: 4px;
+	}
+	.board.stars {
+		--cell: min(calc((100vw - 42px) / var(--n)), 56px);
 	}
 }
 
