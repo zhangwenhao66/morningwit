@@ -1,5 +1,5 @@
 ---
-interface Props { kind: 'binairo' | 'star' | 'daily' | 'sudoku' }
+interface Props { kind: 'binairo' | 'star' | 'daily' | 'sudoku' | 'wordbox' }
 const { kind } = Astro.props;
 ---
 {kind === 'binairo' && (
@@ -31,6 +31,19 @@ const { kind } = Astro.props;
 		<g stroke="#eadfd2" stroke-width="1"><path d="M20 12v72M28 12v72M44 12v72M52 12v72M68 12v72M76 12v72M12 20h72M12 28h72M12 44h72M12 52h72M12 68h72M12 76h72" /></g>
 		<g font-family="Fredoka Variable, sans-serif" font-weight="600" font-size="9" fill="#2a2540" text-anchor="middle"><text x="16" y="19">5</text><text x="48" y="27">3</text><text x="72" y="35">7</text><text x="24" y="51">9</text><text x="56" y="59">1</text><text x="80" y="67">4</text><text x="32" y="75">8</text><text x="64" y="83">2</text></g>
 		<rect x="36" y="36" width="24" height="24" fill="#ff7a6b" opacity=".22" />
+	</svg>
+)}
+{kind === 'wordbox' && (
+	<svg class="tile-art" viewBox="0 0 96 96" aria-hidden="true">
+		<rect x="4" y="4" width="88" height="88" rx="18" fill="#fff" />
+		<rect x="22" y="22" width="52" height="52" rx="8" fill="#fff2e4" stroke="#2a2540" stroke-width="2.5" />
+		<polyline points="35,22 48,74 61,22 74,48" fill="none" stroke="#ff7a6b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+		<g fill="#fff" stroke="#2a2540" stroke-width="2">
+			<circle cx="35" cy="22" r="6" /><circle cx="48" cy="22" r="6" /><circle cx="61" cy="22" r="6" />
+			<circle cx="74" cy="35" r="6" /><circle cx="74" cy="48" r="6" /><circle cx="74" cy="61" r="6" />
+			<circle cx="35" cy="74" r="6" /><circle cx="48" cy="74" r="6" /><circle cx="61" cy="74" r="6" />
+			<circle cx="22" cy="35" r="6" /><circle cx="22" cy="48" r="6" /><circle cx="22" cy="61" r="6" />
+		</g>
 	</svg>
 )}
 {kind === 'daily' && (

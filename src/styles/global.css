@@ -1018,6 +1018,129 @@ a:hover {
 	}
 }
 
+
+/* ---------- word box solver ---------- */
+.wb-inputs {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+}
+.wb-field label {
+	display: block;
+	margin-bottom: 4px;
+	font-size: 0.86rem;
+	font-weight: 700;
+	color: var(--ink-2);
+}
+.wb-field input {
+	width: 100%;
+	height: 52px;
+	padding: 0 14px;
+	border: 2px solid var(--line);
+	border-radius: var(--r-sm);
+	background: var(--surface);
+	color: var(--ink);
+	font: 700 1.5rem var(--font-display);
+	letter-spacing: 0.35em;
+	text-transform: uppercase;
+}
+.wb-field input:focus-visible {
+	outline: 3px solid var(--focus);
+	outline-offset: 2px;
+	border-color: var(--focus);
+}
+.wb-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: 14px 0 4px;
+}
+.wb-figure {
+	display: grid;
+	place-items: center;
+	margin: 8px 0;
+}
+.wb-svg {
+	width: 100%;
+	max-width: 340px;
+	height: auto;
+}
+.wb-svg .frame {
+	fill: var(--surface-2);
+	stroke: var(--ink);
+	stroke-width: 3;
+}
+.wb-svg .node {
+	fill: var(--surface);
+	stroke: var(--ink);
+	stroke-width: 2;
+}
+.wb-svg .node.empty {
+	stroke: var(--line);
+	stroke-dasharray: 3 3;
+}
+.wb-svg .letter {
+	fill: var(--ink);
+	font: 700 18px var(--font-display);
+	text-anchor: middle;
+}
+.wb-svg .path {
+	fill: none;
+	stroke: var(--coral);
+	stroke-width: 4;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	opacity: 0.9;
+}
+.wb-svg .step {
+	fill: var(--coral-deep);
+	font: 700 13px var(--font-body);
+	text-anchor: middle;
+}
+.wb-status {
+	min-height: 1.6em;
+	margin: 6px 0 10px;
+	color: var(--ink-2);
+}
+.hint-stack[inert] {
+	opacity: 0.55;
+}
+.wb-list {
+	display: grid;
+	gap: 8px;
+	margin: 10px 0;
+	padding: 0;
+	list-style: none;
+}
+.wb-list button {
+	width: 100%;
+	padding: 10px 14px;
+	border: 2px solid var(--line);
+	border-radius: var(--r-sm);
+	background: var(--surface);
+	color: var(--ink);
+	font: 700 1rem var(--font-display);
+	letter-spacing: 0.04em;
+	text-align: left;
+	cursor: pointer;
+}
+.wb-list button[aria-pressed='true'] {
+	border-color: var(--coral);
+	background: var(--surface-2);
+}
+.wb-list .count {
+	margin-left: 8px;
+	font: 600 0.8rem var(--font-body);
+	letter-spacing: 0;
+	color: var(--ink-2);
+}
+@media (max-width: 520px) {
+	.wb-field input {
+		font-size: 1.3rem;
+		letter-spacing: 0.25em;
+	}
+}
+
 @media (prefers-reduced-motion: reduce) {
 	* {
 		transition: none !important;

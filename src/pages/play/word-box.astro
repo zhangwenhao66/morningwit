@@ -1,0 +1,107 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import FAQPage from '../../../vendor/site-toolkit/packages/schema/src/FAQPage.astro';
+
+const faq = [
+	{
+		question: 'What is a word box puzzle?',
+		answer:
+			'Twelve letters sit on the four sides of a square, three per side. You chain words that each use letters from the box. A word needs at least three letters, two letters in a row cannot come from the same side, and each word starts with the last letter of the one before. The aim is to use all twelve letters in as few words as you can.',
+	},
+	{
+		question: 'Does this tool give the whole answer straight away?',
+		answer:
+			'No. The three nudges open one at a time: how many words the shortest answer needs and how long its first word is, how that first word begins, and then the first word itself. The full list of answers stays folded away until you press the button.',
+	},
+	{
+		question: 'Why does a game reject a word this tool suggested?',
+		answer:
+			'The suggestions come from the ENABLE word list, a public-domain list made for word games. A puzzle can use a different dictionary, so an unusual word may be accepted here and refused there. Answers made of everyday words are listed first, but that ranking is only a guess.',
+	},
+	{
+		question: 'Do my letters leave my device?',
+		answer:
+			'No. The page downloads one static word list, then does all the searching in your browser. The last valid box you typed is kept in your own browser storage so it is there when you come back.',
+	},
+];
+---
+<Layout
+	title="Word box solver: hints for a four-sided letter puzzle"
+	description="Type the twelve letters of a four-sided word box and open hints one layer at a time, from how many words you need to the opening word itself."
+>
+	<div class="wrap">
+		<div class="game-head">
+			<h1>Word box solver</h1>
+			<p>Type the twelve letters, then open the nudges. The answers stay folded away until you ask.</p>
+		</div>
+		<div class="game-frame" id="wordbox">
+			<section class="stage" aria-label="Word box">
+				<div class="banner" id="banner" role="status" aria-live="polite"></div>
+				<div class="wb-inputs">
+					<div class="wb-field"><label for="wb-top">Top, left to right</label><input id="wb-top" maxlength="3" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" /></div>
+					<div class="wb-field"><label for="wb-right">Right, top to bottom</label><input id="wb-right" maxlength="3" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" /></div>
+					<div class="wb-field"><label for="wb-bottom">Bottom, left to right</label><input id="wb-bottom" maxlength="3" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" /></div>
+					<div class="wb-field"><label for="wb-left">Left, top to bottom</label><input id="wb-left" maxlength="3" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text" /></div>
+				</div>
+				<div class="wb-actions">
+					<button class="btn" id="wb-example" type="button"><svg aria-hidden="true"><use href="#i-shuffle"></use></svg>Try an example</button>
+					<button class="btn" id="wb-clear" type="button">Clear</button>
+				</div>
+				<div class="wb-figure">
+					<svg class="wb-svg" id="wb-svg" viewBox="0 0 300 300" role="img" aria-labelledby="wb-t wb-d"></svg>
+				</div>
+				<p class="wb-status" id="wb-status" role="status" aria-live="polite">Type all twelve letters to get answers.</p>
+				<button class="btn" id="wb-reveal" type="button">Show the answers (spoilers)</button>
+				<div id="wb-answers" hidden>
+					<p class="sub">Tap an answer to trace it on the box. The numbers show which word comes first.</p>
+					<ol class="wb-list" id="wb-list"></ol>
+					<button class="btn" id="wb-more" type="button" hidden>Show more</button>
+				</div>
+				<noscript><p>This tool needs JavaScript to run. Nothing is sent anywhere; the letters stay in your browser.</p></noscript>
+			</section>
+			<aside class="side">
+				<div class="panel">
+					<h2>Nudges</h2>
+					<p class="sub">Stuck? Open them one at a time. Each one says a little more, and none opens until you ask.</p>
+					<p class="sr-only" id="wb-hint-live" role="status" aria-live="polite"></p>
+					<div class="hint-stack" id="hints" inert>
+						<button type="button" class="hint-card" data-level="1" data-covered="true"><span class="tag">Nudge 1 · how long</span><span class="cover">Tap for how many words the shortest answer needs and how long its first word is</span><span class="body"></span></button>
+						<button type="button" class="hint-card" data-level="2" data-covered="true" disabled><span class="tag">Nudge 2 · how it starts</span><span class="cover">Tap for how the opening word begins</span><span class="body"></span></button>
+						<button type="button" class="hint-card" data-level="3" data-covered="true" disabled><span class="tag">Nudge 3 · the opening word</span><span class="cover">Tap for the opening word, traced on the box</span><span class="body"></span></button>
+					</div>
+				</div>
+				<div class="panel">
+					<h2>The rules of the box</h2>
+					<ul class="legend">
+						<li>Each word has three letters or more.</li>
+						<li>Two letters in a row never come from the same side.</li>
+						<li>A word starts with the last letter of the word before it.</li>
+						<li>The letters of the box are all different, twelve in total.</li>
+					</ul>
+				</div>
+			</aside>
+		</div>
+	</div>
+	<div class="wrap-narrow prose">
+		<h2>How the solver decides what to show</h2>
+		<p>The tool checks every word in a public-domain list against your box, keeps the ones that obey the side rule, and then looks for chains that cover all twelve letters. It tries one word, then two, and only goes to three when two-word chains are scarce. Answers are ordered by number of words first, then by how familiar the words are, then by total length.</p>
+		<p>The familiarity mark comes from checking each word against a pronunciation dictionary. A word missing from it may still be valid. It just ranks lower, because it is less likely to be one you would use.</p>
+		<h2>About the word list</h2>
+		<p>Suggestions come from <a href="http://wiki.puzzlers.org/dokuwiki/doku.php?id=solving:wordlists:about:enable_readme">ENABLE</a>, a word list compiled by Alan Beale and released into the public domain. Words with a doubled letter are left out, because a double letter would sit on one side twice. The familiarity mark uses the <a href="https://www.speech.cs.cmu.edu/cgi-bin/cmudict">CMU Pronouncing Dictionary</a>, and only as a yes-or-no flag.</p>
+		<h2>Questions</h2>
+		<div class="faq">
+			{faq.map((f) => (
+				<details>
+					<summary>{f.question}</summary>
+					<p>{f.answer}</p>
+				</details>
+			))}
+		</div>
+	</div>
+	<FAQPage items={faq} />
+	<script>
+		import { mountWordBox } from '../../scripts/wordbox-ui.ts';
+		const root = document.getElementById('wordbox');
+		if (root) mountWordBox(root);
+	</script>
+</Layout>
