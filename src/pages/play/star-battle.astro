@@ -21,7 +21,7 @@ const faq = [
 	},
 	{
 		question: 'Does each board have one answer?',
-		answer: 'Yes. A solver checks every board before you see it, so there is exactly one solution.',
+		answer: 'Yes. A solver checks that exactly one solution exists, and a second solver that reasons like a person has to be able to finish the board. Gentle boards need only confined regions. Tricky boards also need a group pattern, where several regions share the same few rows or columns.',
 	},
 ];
 ---
@@ -68,8 +68,8 @@ const faq = [
 		</ul>
 
 		<div class="note">
-			Hints name the tightest region. Nudge 1 says which region to look at, nudge 2 says how many places it has left and which row its star sits in,
-			and nudge 3 gives the square. If one of your stars is wrong, the hints say so before anything else. See <a href="/fair-hints/">how hints work</a>.
+			Hints follow the same steps a person would take. Nudge 1 highlights where to look, nudge 2 says what pattern is there, and nudge 3 tells you what to do with it.
+			If one of your stars is wrong, the hints say so before anything else. See <a href="/fair-hints/">how hints work</a>.
 		</div>
 
 		<h2>Questions</h2>

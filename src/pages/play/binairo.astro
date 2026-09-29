@@ -16,7 +16,7 @@ const faq = [
 	{
 		question: 'Does every puzzle have exactly one solution?',
 		answer:
-			'Yes. A solver checks each board before you see it, so exactly one answer fits. We have not rated how much reasoning each board takes, so on the harder settings you may sometimes have to try a square and see what breaks.',
+			'Yes. A solver checks that exactly one answer fits, and a second solver that reasons like a person has to be able to finish the board using pair caps, sandwiches, line counts and the no-copies rule. If it cannot, the board is thrown away.',
 	},
 	{
 		question: 'Is my progress saved?',
@@ -71,7 +71,7 @@ const faq = [
 		</p>
 
 		<div class="note">
-			Hints here are layered on purpose. The first nudge points at a row. The second names the rule. Only the third gives you a cell.
+			Hints here are layered on purpose. The first nudge highlights where to look. The second says what to notice. Only the third gives you a cell. If your board already breaks a rule, the hints say so first.
 			More on that in <a href="/fair-hints/">how hints work</a>.
 		</div>
 

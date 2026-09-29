@@ -1,4 +1,5 @@
-import { generate, check, nextHint, EMPTY, cloneGrid, type Grid, type Difficulty, type BinairoPuzzle } from '../lib/binairo.ts';
+import { check, EMPTY, cloneGrid, type Grid, type Difficulty, type BinairoPuzzle } from '../lib/binairo.ts';
+import { generateLogical, nextBinairoStep } from '../lib/binairo-logic.ts';
 import { hashSeed, todayKey } from '../lib/rng.ts';
 import { read, write, markGoing, markDone } from './store.ts';
 import { createTimer, createHintStack, showBanner, hideBanner, arrowMove, formatTime } from './game-shell.ts';
@@ -43,10 +44,22 @@ export function mountBinairo(root: HTMLElement, opts: { daily?: boolean } = {}):
 	const hints = createHintStack(
 		hintRoot,
 		(level) => {
-			const h = nextHint(grid, puzzle.solution, level);
-			if (!h) return null;
-			const cells = level === 1 ? Array.from({ length: size }, (_, c) => `${h.r},${c}`) : [`${h.r},${h.c}`];
-			return { message: h.message, cells };
+			if (check(grid).conflicts.size > 0) {
+				const bad = Array.from(check(grid).conflicts);
+				return {
+					message:
+						level === 3
+							? 'Fix the striped squares first. Something on the board breaks a rule, and a hint would build on a mistake.'
+							: 'Something on the board breaks a rule. Look at the striped squares before going on.',
+					cells: level === 1 ? bad : [],
+				};
+			}
+			const step = nextBinairoStep(grid);
+			if (!step) return null;
+			const focus = step.focus.map(([r, c]) => `${r},${c}`);
+			if (level === 1) return { message: 'Look at the highlighted squares. One of the empty ones is decided.', cells: focus };
+			if (level === 2) return { message: step.idea, cells: focus };
+			return { message: step.message, cells: [`${step.r},${step.c}`] };
 		},
 		(cells) => {
 			hintCells = new Set(cells);
@@ -69,7 +82,7 @@ export function mountBinairo(root: HTMLElement, opts: { daily?: boolean } = {}):
 
 	function load(newSeed: number): void {
 		seed = newSeed;
-		puzzle = generate(size, seed, diff);
+		puzzle = generateLogical(size, seed, diff);
 		const saved = read<Saved | null>(key(), null);
 		if (saved && saved.grid.length === size) {
 			grid = saved.grid;

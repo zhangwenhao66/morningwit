@@ -1,4 +1,5 @@
-import { generate, check, nextHint, emptyMarks, regionLetter, type Marks, type StarPuzzle } from '../lib/starbattle.ts';
+import { check, nextHint, emptyMarks, regionLetter, type Marks } from '../lib/starbattle.ts';
+import { generateLogical, nextLogicStep, type LogicalPuzzle } from '../lib/starbattle-logic.ts';
 import { hashSeed, todayKey } from '../lib/rng.ts';
 import { read, write, markGoing, markDone } from './store.ts';
 import { createTimer, createHintStack, showBanner, hideBanner, arrowMove, formatTime } from './game-shell.ts';
@@ -32,7 +33,7 @@ export function mountStarBattle(root: HTMLElement, opts: { daily?: boolean } = {
 	if (!SIZES.includes(size)) size = 7;
 
 	let seed = 0;
-	let puzzle: StarPuzzle;
+	let puzzle: LogicalPuzzle;
 	let marks: Marks;
 	let history: Marks[] = [];
 	let done = false;
@@ -44,13 +45,30 @@ export function mountStarBattle(root: HTMLElement, opts: { daily?: boolean } = {
 	const hints = createHintStack(
 		hintRoot,
 		(level) => {
-			const h = nextHint(puzzle, marks, level);
-			const cells: string[] = [];
-			if (h.cell) cells.push(`${h.cell[0]},${h.cell[1]}`);
-			else if (h.region !== undefined) {
-				for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) if (puzzle.regions[r][c] === h.region) cells.push(`${r},${c}`);
+			// A star that is not in the solution poisons every deduction, so say so first.
+			const wrong = nextHint(puzzle, marks, level);
+			const stars: Array<[number, number]> = [];
+			for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) if (marks[r][c] === 1) stars.push([r, c]);
+			const bad = stars.some(([r, c]) => puzzle.solution[r] !== c);
+			if (bad) {
+				const cells = level === 3 && wrong.cell ? [`${wrong.cell[0]},${wrong.cell[1]}`] : [];
+				return { message: wrong.message, cells };
 			}
-			return { message: h.message, cells };
+			const dots: Array<[number, number]> = [];
+			for (let r = 0; r < size; r++) for (let c = 0; c < size; c++) if (marks[r][c] === 2) dots.push([r, c]);
+			const step = nextLogicStep(puzzle, stars, 3, dots);
+			if (!step) {
+				const cells: string[] = wrong.cell ? [`${wrong.cell[0]},${wrong.cell[1]}`] : [];
+				return { message: wrong.message, cells };
+			}
+			const focus = step.focus.map(([r, c]) => `${r},${c}`);
+			if (level === 1) return { message: 'Look at the highlighted squares. A pattern is hiding there.', cells: focus };
+			if (level === 2) return { message: step.idea ?? step.message, cells: focus };
+			const result = step.place ? step.place : null;
+			return {
+				message: result ? step.message : `${step.message} Put a dot on each highlighted square.`,
+				cells: result ? [`${result[0]},${result[1]}`] : (step.cross ?? []).map(([r, c]) => `${r},${c}`),
+			};
 		},
 		(cells) => {
 			hintCells = new Set(cells);
@@ -70,7 +88,7 @@ export function mountStarBattle(root: HTMLElement, opts: { daily?: boolean } = {
 
 	function load(newSeed: number): void {
 		seed = newSeed;
-		puzzle = generate(size, seed);
+		puzzle = generateLogical(size, seed);
 		const saved = read<Saved | null>(key(), null);
 		if (saved && saved.marks.length === size) {
 			marks = saved.marks;
@@ -151,7 +169,7 @@ export function mountStarBattle(root: HTMLElement, opts: { daily?: boolean } = {
 			}
 		}
 		undoBtn.disabled = history.length === 0 || done;
-		if (statLine) statLine.textContent = `${size} × ${size} · one star each`;
+		if (statLine) statLine.textContent = `${size} × ${size} · ${puzzle.grade >= 3 ? 'Tricky' : 'Gentle'}`;
 	}
 
 	function put(r: number, c: number, v: number): void {
