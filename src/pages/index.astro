@@ -40,6 +40,17 @@ import TileArt from '../components/TileArt.astro';
 					</div>
 				</div>
 			</a>
+			<a class="tile" href="/play/sudoku/" data-game="sudoku">
+				<TileArt kind="sudoku" />
+				<div>
+					<h2>Sudoku</h2>
+					<p>Notes, and hints with names.</p>
+					<div class="tile-foot" style="margin-top:10px">
+						<span class="status" data-state="new">Not started</span>
+						<span class="streak-note" data-streak hidden></span>
+					</div>
+				</div>
+			</a>
 			<a class="tile" href="/play/star-battle/" data-game="star-battle">
 				<TileArt kind="star" />
 				<div>

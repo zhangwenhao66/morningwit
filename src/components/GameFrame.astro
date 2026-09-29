@@ -38,6 +38,7 @@ const { sizes = [], diffs = [], daily = false, nudge1, nudge2, nudge3 } = Astro.
 		<div class="board-wrap">
 			<div class="board" id="board"></div>
 		</div>
+		<slot name="pad" />
 		<noscript><p>This puzzle needs JavaScript to run. Nothing is sent anywhere; your progress stays in your browser.</p></noscript>
 	</section>
 	<aside class="side">

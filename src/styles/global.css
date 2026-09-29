@@ -855,6 +855,91 @@ a:hover {
 	flex: none;
 }
 
+/* ---------- sudoku ---------- */
+.board.sudoku {
+	--cell: min(calc((100vw - 60px) / 9), 52px);
+	grid-template-columns: repeat(9, var(--cell));
+	gap: 0;
+	padding: 4px;
+	background: var(--ink);
+	border-radius: 12px;
+}
+@media (min-width: 900px) {
+	.board.sudoku {
+		--cell: 52px;
+	}
+}
+.board.sudoku .cell {
+	border-radius: 0;
+	border: 1px solid var(--line);
+	font-size: 1.35rem;
+	font-weight: 600;
+}
+.board.sudoku .cell.br {
+	border-right: 3px solid var(--ink);
+}
+.board.sudoku .cell.bb {
+	border-bottom: 3px solid var(--ink);
+}
+.board.sudoku .cell[data-locked='true'] {
+	color: var(--ink);
+	font-weight: 700;
+}
+.board.sudoku .cell[data-locked='false'] {
+	color: var(--sky-deep);
+}
+.board.sudoku .cell[data-peer='true'] {
+	background: color-mix(in srgb, var(--sky) 18%, var(--surface));
+}
+.board.sudoku .cell[data-same='true'] {
+	background: color-mix(in srgb, var(--peach) 45%, var(--surface));
+}
+.board.sudoku .cell[data-selected='true'] {
+	background: color-mix(in srgb, var(--sky) 45%, var(--surface));
+}
+.notes {
+	position: absolute;
+	inset: 1px;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-template-rows: repeat(3, 1fr);
+	font: 600 0.5rem/1 var(--font-body);
+	color: var(--ink-2);
+	pointer-events: none;
+}
+.notes span {
+	display: grid;
+	place-items: center;
+}
+.pad {
+	display: grid;
+	grid-template-columns: repeat(9, 1fr);
+	gap: 6px;
+	margin-top: 14px;
+}
+.pad button {
+	appearance: none;
+	min-height: 46px;
+	border-radius: 12px;
+	border: 1.5px solid var(--ink);
+	background: var(--surface);
+	color: var(--ink);
+	font: 700 1.15rem var(--font-display);
+	cursor: pointer;
+}
+.pad button:active {
+	transform: scale(0.94);
+}
+.pad button[data-done='true'] {
+	opacity: 0.35;
+}
+.pad-row {
+	display: flex;
+	gap: 8px;
+	margin-top: 8px;
+	flex-wrap: wrap;
+}
+
 /* ---------- guides ---------- */
 .article {
 	padding: 24px 0 56px;

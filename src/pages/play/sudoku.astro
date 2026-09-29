@@ -1,0 +1,89 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GameFrame from '../../components/GameFrame.astro';
+import FAQPage from '../../../vendor/site-toolkit/packages/schema/src/FAQPage.astro';
+
+const faq = [
+	{
+		question: 'What do the difficulty levels mean?',
+		answer:
+			'Easy boards can be finished with singles alone. Medium boards also need locked candidates or pairs. Hard boards go further, and some need an X-Wing. The label is the hardest technique the board needs, not how many clues it starts with.',
+	},
+	{
+		question: 'Will I ever have to guess?',
+		answer:
+			'No. A solver checks that exactly one solution exists, and a second solver that works like a person has to finish the board with the techniques the hints name. If it cannot, the board is thrown away.',
+	},
+	{
+		question: 'What are the notes for?',
+		answer:
+			'Notes are small digits that record what could still go in a square. Switch on the pencil, tap a digit to add or remove a note, or press auto-notes to fill them all in and then cross out as you learn more.',
+	},
+	{
+		question: 'Is my progress saved?',
+		answer: 'Your board, notes, timer and streak are saved in your own browser. Nothing is sent to a server.',
+	},
+];
+---
+<Layout
+	title="Sudoku with technique hints: play free"
+	description="Play Sudoku free with notes, undo and keyboard play. Hints name the technique and open one layer at a time: where to look, what to notice, then the answer."
+>
+	<div class="wrap">
+		<div class="game-head">
+			<h1>Sudoku</h1>
+			<p>Classic 9×9, with hints that name the technique instead of just giving the digit.</p>
+		</div>
+		<GameFrame diffs={['easy', 'medium', 'hard']} nudge1="Tap for a place to look" nudge2="Tap for what to notice" nudge3="Tap for the technique and the answer">
+			<div class="pad-wrap" slot="pad">
+				<div class="pad" id="pad">
+					{[1, 2, 3, 4, 5, 6, 7, 8, 9].map((d) => <button type="button" data-d={d} aria-label={`Digit ${d}`}>{d}</button>)}
+				</div>
+				<div class="pad-row">
+					<button class="btn" id="pencil" type="button" aria-pressed="false">Pencil notes</button>
+					<button class="btn" id="auto-notes" type="button">Auto-notes</button>
+					<button class="btn" id="erase" type="button">Erase</button>
+				</div>
+			</div>
+			<ul class="legend" slot="legend">
+				<li>Bold digits are given. Blue digits are yours.</li>
+				<li>Keys 1 to 9 enter a digit, Backspace erases, P toggles pencil notes.</li>
+				<li>Arrow keys move. Ctrl or ⌘ + Z undoes.</li>
+				<li>Striped red squares repeat a digit in a row, column or box.</li>
+			</ul>
+		</GameFrame>
+	</div>
+	<div class="wrap-narrow prose">
+		<h2>How to play Sudoku</h2>
+		<p>Fill the grid so every row, every column and every 3×3 box holds the digits 1 to 9 once each. The digits that start on the board are fixed.</p>
+
+		<h2>The techniques behind the hints</h2>
+		<p>Each hint is one step a person could take, named after the pattern it uses.</p>
+		<ul>
+			<li>Naked single. A square has only one digit left after you cross off everything in its row, column and box.</li>
+			<li>Hidden single. In a row, column or box, a digit has only one square where it can go.</li>
+			<li>Pointing and claiming. A digit is stuck in one line inside a box, or in one box inside a line, which clears that digit from the rest of the line or box.</li>
+			<li>Pairs and triples. Two or three squares in a unit share only that many digits, so those digits leave the other squares.</li>
+			<li>X-Wing. A digit has just two places in each of two rows, and the places line up in the same two columns. The digit is then gone from everything else in those columns.</li>
+		</ul>
+		<div class="note">
+			Hints open in three layers so you only take what you want. If your board already breaks a rule, the hints say so first. See <a href="/fair-hints/">how hints work</a>.
+		</div>
+
+		<h2>Questions</h2>
+		<div class="faq">
+			{faq.map((f) => (
+				<details>
+					<summary>{f.question}</summary>
+					<p>{f.answer}</p>
+				</details>
+			))}
+		</div>
+	</div>
+	<FAQPage items={faq} />
+	<script>
+		import { mountSudoku } from '../../scripts/sudoku-ui.ts';
+		const root = document.getElementById('game');
+		if (root) mountSudoku(root);
+	</script>
+</Layout>

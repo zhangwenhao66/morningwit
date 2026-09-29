@@ -22,6 +22,12 @@ export const GAMES = [
 		href: '/play/binairo/',
 	},
 	{
+		slug: 'sudoku',
+		name: 'Sudoku',
+		short: 'Classic 9x9 with notes and hints that name the technique.',
+		href: '/play/sudoku/',
+	},
+	{
 		slug: 'star-battle',
 		name: 'Star Battle',
 		short: 'One star per row, column and region. Stars never touch.',
