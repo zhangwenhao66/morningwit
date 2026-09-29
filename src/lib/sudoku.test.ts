@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { generateSudoku, countSolutions, solveSudokuByLogic, checkSudoku, boardFrom, nextSudokuStep, applyStep, bit, type Grid } from './sudoku.ts';
+import { generateSudoku, countSolutions, solveSudokuByLogic, checkSudoku, boardFrom, nextSudokuStep, applyStep, bit, rawPuzzle, type Grid } from './sudoku.ts';
 
 test('puzzles have exactly one solution and the stored solution is valid', () => {
 	for (const [seed, level] of [[1, 'easy'], [2, 'medium'], [3, 'hard']] as const) {
@@ -56,4 +56,39 @@ test('the solver finds an X-Wing on a known position', () => {
 		if (res.steps.some((x) => x.technique === 'x-wing')) found++;
 	}
 	assert.ok(found > 0, 'no X-Wing appeared in 60 hard boards');
+});
+
+test('skyscraper never removes a digit that belongs in the solution, and it does turn up on hard raw boards', () => {
+	let seen = 0;
+	for (let seed = 1; seed <= 120; seed++) {
+		const p = rawPuzzle(seed, 24);
+		const b = boardFrom(p.givens);
+		if (!b) continue;
+		let step;
+		let guard = 0;
+		while ((step = nextSudokuStep(b, 5)) && guard++ < 600) {
+			for (const e of step.eliminate ?? []) assert.notEqual(p.solution[e.i], e.d, `seed ${seed}: ${step.technique} removed a true digit`);
+			if (step.place) assert.equal(p.solution[step.place.i], step.place.d, `seed ${seed}: wrong placement`);
+			if (step.technique === 'skyscraper') {
+				seen++;
+				assert.equal(step.focus.length, 4);
+				assert.equal(step.grade, 5);
+			}
+			applyStep(b, step);
+		}
+	}
+	assert.ok(seen > 0, 'no skyscraper found in 120 boards, the test would prove nothing');
+});
+
+test('the game itself never uses skyscraper: default hints stop at grade 4', () => {
+	for (let seed = 1; seed <= 40; seed++) {
+		const p = rawPuzzle(seed, 24);
+		const b = boardFrom(p.givens)!;
+		let step;
+		let guard = 0;
+		while ((step = nextSudokuStep(b)) && guard++ < 600) {
+			assert.notEqual(step.technique, 'skyscraper');
+			applyStep(b, step);
+		}
+	}
 });

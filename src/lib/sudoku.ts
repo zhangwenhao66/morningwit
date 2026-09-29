@@ -140,11 +140,12 @@ function randomFull(rng: Rng): Grid {
 
 /* ---------- human-style solver ---------- */
 
-export type Technique = 'naked-single' | 'hidden-single' | 'pointing' | 'claiming' | 'naked-subset' | 'hidden-pair' | 'x-wing';
+export type Technique = 'naked-single' | 'hidden-single' | 'pointing' | 'claiming' | 'naked-subset' | 'hidden-pair' | 'x-wing' | 'skyscraper';
 
 export interface SudokuStep {
 	technique: Technique;
-	grade: 1 | 2 | 3 | 4;
+	/** 5 (Skyscraper) is never used by the game: generation and hints stop at 4. It exists for guides and tools. */
+	grade: 1 | 2 | 3 | 4 | 5;
 	/** A digit goes into a cell. */
 	place?: { i: number; d: number };
 	/** Candidates removed (pencil marks that can go). */
@@ -387,13 +388,65 @@ function xWing(b: Board): SudokuStep | null {
 	return null;
 }
 
+/**
+ * Skyscraper: a digit has exactly two places in each of two rows (or columns), and one place of each sits in the same
+ * column (or row). The other two places, the "roof", cannot both be wrong: if the shared column holds the digit in one
+ * row it cannot in the other, so the other row's digit lands on its roof square. Either way one roof square holds it,
+ * so any square that sees both roof squares cannot. The four pattern squares themselves are never touched.
+ */
+export function skyscraper(b: Board): SudokuStep | null {
+	for (let d = 1; d <= 9; d++) {
+		for (const byRow of [true, false]) {
+			const lines = byRow ? ROWS : COLS;
+			const spots: number[][] = lines.map((line) =>
+				b.grid.some((v, i) => v === d && line.includes(i))
+					? []
+					: line.filter((i) => b.grid[i] === 0 && b.cand[i] & bit(d)).map((i) => (byRow ? colOf(i) : rowOf(i))),
+			);
+			for (let a = 0; a < 9; a++) {
+				if (spots[a].length !== 2) continue;
+				for (let c = a + 1; c < 9; c++) {
+					if (spots[c].length !== 2) continue;
+					const shared = spots[a].filter((x) => spots[c].includes(x));
+					if (shared.length !== 1) continue;
+					const base = shared[0];
+					const xa = spots[a].find((x) => x !== base)!;
+					const xc = spots[c].find((x) => x !== base)!;
+					const at = (line: number, cross: number): number => (byRow ? line * 9 + cross : cross * 9 + line);
+					const roofA = at(a, xa);
+					const roofC = at(c, xc);
+					const pattern = new Set([at(a, base), at(c, base), roofA, roofC]);
+					const out: Array<{ i: number; d: number }> = [];
+					for (let i = 0; i < 81; i++) {
+						if (pattern.has(i) || b.grid[i] !== 0 || !(b.cand[i] & bit(d))) continue;
+						if (PEERS[i].includes(roofA) && PEERS[i].includes(roofC)) out.push({ i, d });
+					}
+					if (!out.length) continue;
+					const lineWord = byRow ? 'rows' : 'columns';
+					const crossWord = byRow ? 'column' : 'row';
+					return {
+						technique: 'skyscraper',
+						grade: 5,
+						eliminate: out,
+						focus: [at(a, base), at(c, base), roofA, roofC],
+						message: `In ${lineWord} ${a + 1} and ${c + 1}, the digit ${d} has only two places each, and one place in each is in ${crossWord} ${base + 1}. Both of those cannot hold a ${d}, so at least one of the two end squares, ${cellName(roofA)} and ${cellName(roofC)}, must. A square that sees both of them cannot be a ${d}.`,
+						idea: `Follow the digit ${d} through ${lineWord} ${a + 1} and ${c + 1}. Each has two places left, and one place in each sits in the same ${crossWord}.`,
+					};
+				}
+			}
+		}
+	}
+	return null;
+}
+
 function nextStepFor(b: Board, maxGrade: number): SudokuStep | null {
 	return (
 		nakedSingle(b) ??
 		hiddenSingle(b) ??
 		(maxGrade >= 2 ? lockedCandidates(b) : null) ??
 		(maxGrade >= 3 ? (nakedSubset(b) ?? hiddenPair(b)) : null) ??
-		(maxGrade >= 4 ? xWing(b) : null)
+		(maxGrade >= 4 ? xWing(b) : null) ??
+		(maxGrade >= 5 ? skyscraper(b) : null)
 	);
 }
 
@@ -440,6 +493,13 @@ function carve(full: Grid, rng: Rng, target: number): Grid {
 		else clues--;
 	}
 	return g;
+}
+
+/** A random one-solution board with about `clues` givens and no check on which technique solves it. For tools and tests. */
+export function rawPuzzle(seed: number, clues: number): { givens: Grid; solution: Grid } {
+	const rng = makeRng(seed >>> 0);
+	const full = randomFull(rng);
+	return { givens: carve(full, rng, clues), solution: full };
 }
 
 export type Level = 'easy' | 'medium' | 'hard';
