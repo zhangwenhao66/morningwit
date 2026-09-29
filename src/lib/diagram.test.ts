@@ -33,3 +33,11 @@ test('binairo diagram uses different shapes for the two symbols', () => {
 	assert.equal((svg.match(/A[\d.]+ [\d.]+ 0 1 0/g) ?? []).length, moons);
 	assert.ok(!svg.includes('—') && !svg.includes('–'));
 });
+
+test('sudoku pencil marks draw each digit and strike the removed ones', () => {
+	const g = Array<number>(81).fill(0);
+	const svg = sudokuSvg(g, { title: 't', desc: 'd', pencil: [{ cell: 10, digits: [2, 5, 7], removed: [5] }, { cell: 11, digits: [1] }] });
+	assert.equal((svg.match(/>[1-9]<\/text>/g) ?? []).length, 4);
+	assert.equal((svg.match(/stroke="#b23a2b" stroke-width="1.6"/g) ?? []).length, 1);
+	assert.ok(!svg.includes('—') && !svg.includes('–'));
+});

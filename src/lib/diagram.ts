@@ -17,6 +17,8 @@ export interface SudokuDiagramOptions {
 	/** Light bands behind whole rows or columns, to show which lines matter. */
 	bandRows?: number[];
 	bandCols?: number[];
+	/** Small pencil-mark digits in empty squares. `removed` digits are drawn red and struck through. */
+	pencil?: Array<{ cell: number; digits: number[]; removed?: number[] }>;
 	size?: number;
 	title: string;
 	desc: string;
@@ -44,6 +46,18 @@ export function sudokuSvg(grid: Grid, o: SudokuDiagramOptions): string {
 		const cy = pad + rowOf(i) * cell + cell / 2;
 		if (grid[i]) {
 			parts.push(`<text x="${cx}" y="${cy + 7}" text-anchor="middle" font-family="Figtree, system-ui, sans-serif" font-weight="700" font-size="22" fill="${INK}">${grid[i]}</text>`);
+		}
+	}
+	for (const pm of o.pencil ?? []) {
+		const x0 = pad + colOf(pm.cell) * cell;
+		const y0 = pad + rowOf(pm.cell) * cell;
+		const gone = new Set(pm.removed ?? []);
+		for (const d of pm.digits) {
+			const cx = x0 + 8 + ((d - 1) % 3) * 12;
+			const cy = y0 + 12 + Math.floor((d - 1) / 3) * 12;
+			const bad = gone.has(d);
+			parts.push(`<text x="${cx}" y="${cy + 3}" text-anchor="middle" font-family="Figtree, system-ui, sans-serif" font-weight="${bad ? 700 : 600}" font-size="10" fill="${bad ? '#b23a2b' : INK}">${d}</text>`);
+			if (bad) parts.push(`<line x1="${cx - 4}" y1="${cy + 1}" x2="${cx + 4}" y2="${cy + 1}" stroke="#b23a2b" stroke-width="1.6"/>`);
 		}
 	}
 	if (o.candidatesOf) {
