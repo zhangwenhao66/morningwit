@@ -1,9 +1,11 @@
 ---
 import { CONTACT_EMAIL } from '../consts';
+import { guides } from '../data/guides';
 ---
 <footer class="foot">
 	<div class="wrap">
 		<div class="foot-links">
+			{guides.length > 0 && <a href="/learn/">Guides</a>}
 			<a href="/about/">About</a>
 			<a href="/fair-hints/">How hints work</a>
 			<a href="/privacy/">Privacy</a>

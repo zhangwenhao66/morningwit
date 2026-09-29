@@ -1,0 +1,36 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { guides, categorySlug } from '../../data/guides';
+
+const sorted = [...guides].sort((a, b) => (b.published ?? b.updated).localeCompare(a.published ?? a.updated));
+const groups = new Map<string, typeof guides>();
+for (const g of sorted) groups.set(g.category, [...(groups.get(g.category) ?? []), g]);
+---
+<Layout
+	title="Puzzle guides and strategies"
+	description="Step-by-step guides for logic puzzles: how the rules work, which patterns to look for, and worked examples you can follow."
+	noindex={guides.length === 0}
+>
+	<div class="wrap">
+		<div class="game-head">
+			<h1>Guides</h1>
+			<p>How the rules work, which patterns to look for, and examples you can follow with a pencil.</p>
+		</div>
+		{guides.length === 0 && <p class="lede">The first guides are on the way.</p>}
+		{[...groups.entries()].map(([cat, list]) => (
+			<section class="section-head" id={categorySlug(cat)}>
+				<h2>{cat}</h2>
+				<div class="table-grid">
+					{list.map((g) => (
+						<a class="tile" href={`/learn/${g.slug}/`}>
+							<div>
+								<h3>{g.title}</h3>
+								<p>{g.description}</p>
+							</div>
+						</a>
+					))}
+				</div>
+			</section>
+		))}
+	</div>
+</Layout>

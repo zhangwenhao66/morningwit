@@ -855,6 +855,58 @@ a:hover {
 	flex: none;
 }
 
+/* ---------- guides ---------- */
+.article {
+	padding: 24px 0 56px;
+}
+.crumbs {
+	font-size: 0.9rem;
+	color: var(--ink-2);
+	margin-bottom: 8px;
+}
+.crumbs a {
+	color: var(--ink-2);
+}
+.byline {
+	color: var(--ink-2);
+	font-size: 0.95rem;
+	margin-bottom: 20px;
+}
+.summary-tile {
+	background: var(--surface-2);
+	border: 1px solid var(--line);
+	border-left: 8px solid var(--peach);
+	border-radius: var(--r-md);
+	padding: 14px 18px 4px;
+	margin: 0 0 28px;
+}
+.summary-tile .tag {
+	display: block;
+	font: 700 0.75rem var(--font-body);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--ink-2);
+}
+.article h2 {
+	margin-top: 1.6em;
+}
+.article figure {
+	margin: 1.2em 0;
+}
+.article img {
+	max-width: 100%;
+	height: auto;
+	border-radius: var(--r-md);
+}
+.article figcaption {
+	font-size: 0.88rem;
+	color: var(--ink-2);
+}
+.sources ul,
+.related ul {
+	padding-left: 1.2em;
+}
+
 @media (max-width: 520px) {
 	.board {
 		--cell: min(calc((100vw - 68px - 3px * (var(--n) - 1)) / var(--n)), 56px);

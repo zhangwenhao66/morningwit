@@ -1,0 +1,99 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Article from '../../../vendor/site-toolkit/packages/schema/src/Article.astro';
+import BreadcrumbList from '../../../vendor/site-toolkit/packages/schema/src/BreadcrumbList.astro';
+import FAQPage from '../../../vendor/site-toolkit/packages/schema/src/FAQPage.astro';
+import { guides, categorySlug } from '../../data/guides';
+import { renderInline } from '../../lib/inline';
+import { SITE_TITLE, SITE_ORIGIN } from '../../consts';
+
+export function getStaticPaths() {
+	return guides.map((g) => ({ params: { slug: g.slug }, props: { guide: g } }));
+}
+
+const { guide } = Astro.props;
+const url = `${SITE_ORIGIN}/learn/${guide.slug}/`;
+const published = guide.published ?? guide.updated;
+const related = guides
+	.filter((g) => g.slug !== guide.slug)
+	.sort((a, b) => Number(b.category === guide.category) - Number(a.category === guide.category))
+	.slice(0, 3);
+const fmt = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+---
+<Layout title={guide.title} description={guide.description}>
+	<div class="wrap-narrow article">
+		<nav class="crumbs" aria-label="Breadcrumb">
+			<a href="/learn/">Guides</a> <span aria-hidden="true">/</span> <a href={`/learn/#${categorySlug(guide.category)}`}>{guide.category}</a>
+		</nav>
+		<h1>{guide.title}</h1>
+		<p class="byline">By {SITE_TITLE} · Updated {fmt(guide.updated)}</p>
+
+		<aside class="summary-tile" aria-label="Short answer">
+			<span class="tag">The short answer</span>
+			<p set:html={renderInline(guide.coreSummary)} />
+		</aside>
+
+		{guide.sections.map((s) => (
+			<section>
+				<h2>{s.heading}</h2>
+				{s.body.map((p) => <p set:html={renderInline(p)} />)}
+				{s.image && (
+					<figure>
+						<img src={s.image.src} alt={s.image.alt} loading="lazy" />
+						{s.image.credit && <figcaption set:html={renderInline(s.image.credit)} />}
+					</figure>
+				)}
+			</section>
+		))}
+
+		{guide.faq && guide.faq.length > 0 && (
+			<section class="faq">
+				<h2>Questions</h2>
+				{guide.faq.map((f) => (
+					<details>
+						<summary>{f.question}</summary>
+						<p set:html={renderInline(f.answer)} />
+					</details>
+				))}
+			</section>
+		)}
+
+		{guide.sources && guide.sources.length > 0 && (
+			<section class="sources">
+				<h2>Sources</h2>
+				<ul>
+					{guide.sources.map((s) => (
+						<li><a href={s.url} rel="noopener" target="_blank">{s.label}</a></li>
+					))}
+				</ul>
+			</section>
+		)}
+
+		{related.length > 0 && (
+			<section class="related">
+				<h2>Keep going</h2>
+				<ul>
+					{related.map((g) => <li><a href={`/learn/${g.slug}/`}>{g.title}</a></li>)}
+				</ul>
+			</section>
+		)}
+	</div>
+	<Article
+		headline={guide.title}
+		description={guide.description}
+		datePublished={published}
+		dateModified={guide.updated}
+		authorName={SITE_TITLE}
+		authorUrl={`${SITE_ORIGIN}/about/`}
+		image={guide.image ? new URL(guide.image, SITE_ORIGIN).href : `${SITE_ORIGIN}/og.png`}
+		url={url}
+	/>
+	<BreadcrumbList
+		items={[
+			{ name: 'Home', item: `${SITE_ORIGIN}/` },
+			{ name: 'Guides', item: `${SITE_ORIGIN}/learn/` },
+			{ name: guide.title, item: url },
+		]}
+	/>
+	{guide.faq && guide.faq.length > 0 && <FAQPage items={guide.faq} />}
+</Layout>
