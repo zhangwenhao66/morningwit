@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { CONTACT_EMAIL } from '../consts';
+---
+<Layout title="Terms of use" description="The terms for using Morningwit." noindex>
+	<div class="wrap-narrow prose">
+		<h1>Terms of use</h1>
+		<p><em>Last updated September 29, 2026.</em></p>
+
+		<p>These terms cover your use of Morningwit (morningwit.com). By using the site you agree to them.</p>
+
+		<h2>What the site is</h2>
+		<p>Morningwit offers free logic puzzles and hints for entertainment. Puzzle boards and hints are provided as they are, and we cannot promise that every board or hint is free of errors.</p>
+
+		<h2>Content and links</h2>
+		<p>The text, puzzles and original graphics on the site belong to Morningwit. You are welcome to link to a page or quote a short excerpt with attribution. Republishing whole pages elsewhere is not allowed without permission. Game names and trademarks belong to their owners and appear only to say which puzzle a hint is about.</p>
+
+		<h2>No warranty</h2>
+		<p>The site is provided as it is, without warranties of any kind. Your progress is stored in your own browser, so clearing site data removes it.</p>
+
+		<h2>Changes</h2>
+		<p>We may update these terms as the site changes. Continued use after an update means you accept the updated terms.</p>
+
+		<h2>Contact</h2>
+		<p>Questions about these terms: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+	</div>
+</Layout>
