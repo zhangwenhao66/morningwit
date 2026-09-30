@@ -2,21 +2,28 @@
 import Layout from '../layouts/Layout.astro';
 import { CONTACT_EMAIL } from '../consts';
 ---
-<Layout title="Privacy" description="Morningwit keeps your puzzle progress in your own browser and shows ads from Adsterra. This page says what is stored, what the ads do and how to opt out." noindex>
+<Layout title="Privacy" description="Morningwit keeps your puzzle progress in your own browser, uses Google Analytics and Microsoft Clarity, and shows ads from Adsterra. This page says what is stored and how to opt out." noindex>
 	<div class="wrap-narrow prose">
 		<h1>Privacy</h1>
-		<p><em>Last updated September 30, 2026.</em></p>
+		<p><em>Last updated September 30, 2026 (analytics added).</em></p>
 
 		<h2>What stays in your browser</h2>
 		<p>
-			To remember your boards, timer preference, colour theme, streaks, the last valid word box you typed and your ad choice, Morningwit uses your browser's local storage. That data lives on your device.
+			To remember your boards, timer preference, colour theme, streaks, the last valid word box you typed and your cookie choice, Morningwit uses your browser's local storage. That data lives on your device.
 			It is not sent to us. Clearing site data in your browser removes it.
 		</p>
 
 		<h2>What we collect</h2>
 		<p>
-			We do not ask for an account, a name or an email address to play. We do not run analytics.
+			We do not ask for an account, a name or an email address to play.
 			Like any website, our host may keep standard server logs, such as request time and IP address, for security and to keep the site running.
+		</p>
+
+		<h2>Analytics</h2>
+		<p>
+			Morningwit uses Google Analytics to count visits and see which pages get read. It also uses Microsoft Clarity to see where visitors tap and scroll, and Clarity can play sessions back as replays.
+			Both may set cookies, and both receive your IP address and details about your browser and device.
+			Google describes its handling in the <a href="https://policies.google.com/technologies/partner-sites">Google partner-sites policy</a>, and Microsoft's terms are in the <a href="https://privacy.microsoft.com/privacystatement">Microsoft privacy statement</a>.
 		</p>
 
 		<h2>Advertising</h2>
@@ -25,20 +32,21 @@ import { CONTACT_EMAIL } from '../consts';
 			What they do with that is described in the <a href="https://adsterra.com/privacy-policy/">Adsterra privacy policy</a>.
 		</p>
 
-		<h2>Your choices about ads</h2>
+		<h2>Your choices</h2>
 		<p>
-			If your browser's time zone is in Europe, which we use as a rough stand-in for the EEA, the UK and Switzerland, we ask before loading ads, and nothing from Adsterra loads until you allow it. Elsewhere ads load by default.
-			If your browser sends a <a href="https://globalprivacycontrol.org/">Global Privacy Control</a> signal, we treat it as a no. A choice you make is stored in your browser, and you can change it any time with the Ad choices link at the bottom of every page.
+			If your browser's time zone is in Europe, which we use as a rough stand-in for the EEA, the UK and Switzerland, we ask before loading analytics or ads, and nothing from Google, Microsoft or Adsterra loads until you accept. Elsewhere they load by default.
+			If your browser sends a <a href="https://globalprivacycontrol.org/">Global Privacy Control</a> signal, we treat it as a decline. If you decline, the site runs no analytics and shows no ads.
+			Your choice is stored in your browser, and you can change it any time with the Cookie choices button at the bottom of every page.
 		</p>
 		<p>
 			You can also use your browser's tracking controls or an ad blocker. The <a href="https://www.youronlinechoices.com/">Your Online Choices</a> site explains how to opt out of interest-based ads in Europe.
 		</p>
 
 		<h2>Cookies</h2>
-		<p>Morningwit does not set cookies of its own. Once ads load, Adsterra and its partners may set theirs.</p>
+		<p>Morningwit does not set cookies of its own. Once analytics and ads load, Google, Microsoft, Adsterra and its partners may set theirs.</p>
 
 		<h2>Changes</h2>
-		<p>If this changes, for example if analytics are added later, this page will be updated first and will say so plainly.</p>
+		<p>If this changes, this page will be updated first and will say so plainly.</p>
 
 		<h2>Questions</h2>
 		<p>Write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>

@@ -17,6 +17,13 @@ export const INDEXABLE = true;
  * Nothing loads for visitors who decline or who have Global Privacy Control on; see the consent script in Layout.astro.
  */
 export const ADS_ENABLED = true;
+
+/**
+ * Analytics (added 2026-09-30, Owen approved). GA4 property Morningwit, Clarity project morningwit.com.
+ * Loaded only through the same consent gate as the ads (see Layout.astro): Europe asks first, GPC or a stored decline blocks them.
+ */
+export const GA4_ID = 'G-ZQMGH20KBV';
+export const CLARITY_ID = 'yqkvm3fqwa';
 /**
  * Off on purpose (2026-09-30): in the first test the native banner served dating bait with suggestive thumbnails on a puzzle site,
  * even with adult ads switched off in the Adsterra dashboard. The 300x250 box is the only unit shown. Turn on to try it again.

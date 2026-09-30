@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import Icons from '../components/Icons.astro';
 import Organization from '../../vendor/site-toolkit/packages/schema/src/Organization.astro';
 import WebSite from '../../vendor/site-toolkit/packages/schema/src/WebSite.astro';
-import { SITE_TITLE, SITE_DESCRIPTION, SITE_ORIGIN, CONTACT_EMAIL, INDEXABLE, ADS_ENABLED } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION, SITE_ORIGIN, CONTACT_EMAIL, INDEXABLE, ADS_ENABLED, GA4_ID, CLARITY_ID } from '../consts';
 
 interface Props {
 	title?: string;
@@ -68,22 +68,19 @@ const blocked = noindex || !INDEXABLE;
 			<slot />
 		</main>
 		<Footer />
-		{ADS_ENABLED && (
-			<div class="consent-bar" id="consent-bar" role="dialog" aria-label="Ad choices" hidden>
-				<p>
-					Ads from Adsterra keep Morningwit free. They can set cookies. Choose whether to load them.
-					<a href="/privacy/">Privacy</a>
-				</p>
-				<div class="consent-actions">
-					<button type="button" class="btn" id="consent-accept">Allow ads</button>
-					<button type="button" class="btn" id="consent-decline">No ads</button>
-				</div>
+		<div class="consent-bar" id="consent-bar" role="dialog" aria-label="Cookie choices" hidden>
+			<p>
+				Morningwit uses Google Analytics, Microsoft Clarity and Adsterra ads, which set cookies. Accept to allow them. If you decline, the site shows no ads and runs no analytics.
+				<a href="/privacy/">Privacy</a>
+			</p>
+			<div class="consent-actions">
+				<button type="button" class="btn" id="consent-accept">Accept</button>
+				<button type="button" class="btn" id="consent-decline">Decline</button>
 			</div>
-		)}
-		{ADS_ENABLED && (
-			<script is:inline>
-				// Ad consent. A browser time zone in Europe stands in for the EEA, UK and Switzerland: there, nothing loads until
-				// the visitor allows it. Elsewhere ads load by default. Global Privacy Control or a stored "no" keeps them off.
+		</div>
+		<script is:inline define:vars={{ GA4_ID, CLARITY_ID }}>
+				// Consent gate for analytics and ads. A browser time zone in Europe stands in for the EEA, UK and Switzerland: there,
+				// nothing loads until the visitor allows it. Elsewhere they load by default. Global Privacy Control or a stored "no" keeps them off.
 				(function () {
 					var KEY = 'mw-consent';
 					var root = document.documentElement;
@@ -107,10 +104,26 @@ const blocked = noindex || !INDEXABLE;
 							old.parentNode.replaceChild(s, old);
 						});
 					}
+					function loadAnalytics() {
+						var g = document.createElement('script');
+						g.async = true;
+						g.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID;
+						document.head.appendChild(g);
+						window.dataLayer = window.dataLayer || [];
+						window.gtag = function () { window.dataLayer.push(arguments); };
+						window.gtag('js', new Date());
+						window.gtag('config', GA4_ID);
+						(function (c, l, a, r, i, t, y) {
+							c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+							t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+							y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+						})(window, document, 'clarity', 'script', CLARITY_ID);
+					}
 					function grant() {
 						if (loaded) return;
 						loaded = true;
 						root.classList.remove('ads-off');
+						loadAnalytics();
 						var go = function () { if (window.requestIdleCallback) requestIdleCallback(loadAds, { timeout: 3000 }); else setTimeout(loadAds, 500); };
 						if (document.readyState === 'complete') go(); else window.addEventListener('load', go);
 					}
@@ -137,7 +150,6 @@ const blocked = noindex || !INDEXABLE;
 					});
 				})();
 			</script>
-		)}
 		<script is:inline>
 			(function () {
 				var btn = document.getElementById('theme-btn');
