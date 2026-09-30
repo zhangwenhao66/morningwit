@@ -6,6 +6,7 @@ import FAQPage from '../../../vendor/site-toolkit/packages/schema/src/FAQPage.as
 import { guides, categorySlug } from '../../data/guides';
 import AdSlot from '../../components/AdSlot.astro';
 import { renderInline } from '../../lib/inline';
+import { pickRelatedGuides } from '../../lib/relatedGuides';
 import { SITE_TITLE, SITE_ORIGIN } from '../../consts';
 
 export function getStaticPaths() {
@@ -15,10 +16,7 @@ export function getStaticPaths() {
 const { guide } = Astro.props;
 const url = `${SITE_ORIGIN}/learn/${guide.slug}/`;
 const published = guide.published ?? guide.updated;
-const related = guides
-	.filter((g) => g.slug !== guide.slug)
-	.sort((a, b) => Number(b.category === guide.category) - Number(a.category === guide.category))
-	.slice(0, 3);
+const related = pickRelatedGuides(guides, guide);
 const fmt = (d: string) => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 ---
 <Layout title={guide.title} description={guide.description}>
