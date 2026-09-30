@@ -140,11 +140,11 @@ function randomFull(rng: Rng): Grid {
 
 /* ---------- human-style solver ---------- */
 
-export type Technique = 'naked-single' | 'hidden-single' | 'pointing' | 'claiming' | 'naked-subset' | 'hidden-pair' | 'x-wing' | 'skyscraper';
+export type Technique = 'naked-single' | 'hidden-single' | 'pointing' | 'claiming' | 'naked-subset' | 'hidden-pair' | 'x-wing' | 'skyscraper' | 'y-wing';
 
 export interface SudokuStep {
 	technique: Technique;
-	/** 5 (Skyscraper) is never used by the game: generation and hints stop at 4. It exists for guides and tools. */
+	/** 5 (Skyscraper, Y-Wing) is never used by the game: generation and hints stop at 4. It exists for guides and tools. */
 	grade: 1 | 2 | 3 | 4 | 5;
 	/** A digit goes into a cell. */
 	place?: { i: number; d: number };
@@ -439,6 +439,42 @@ export function skyscraper(b: Board): SudokuStep | null {
 	return null;
 }
 
+/**
+ * Y-Wing (also called XY-Wing): a pivot square holds exactly two candidates, A and B. Two more squares that see the pivot
+ * hold exactly A and C, and B and C. If the pivot is A, the first of them must be C; if the pivot is B, the second must be C.
+ * Either way one of the two ends is C, so any square that sees both of them cannot be C.
+ */
+export function yWing(b: Board): SudokuStep | null {
+	for (let pivot = 0; pivot < 81; pivot++) {
+		if (b.grid[pivot] !== 0 || popcount(b.cand[pivot]) !== 2) continue;
+		const [a, bb] = digitsOf(b.cand[pivot]);
+		const ends = PEERS[pivot].filter((i) => b.grid[i] === 0 && popcount(b.cand[i]) === 2);
+		for (const p1 of ends) {
+			if (!(b.cand[p1] & bit(a)) || b.cand[p1] & bit(bb)) continue;
+			const c = digitsOf(b.cand[p1]).find((d) => d !== a)!;
+			for (const p2 of ends) {
+				if (p2 === p1) continue;
+				if (b.cand[p2] !== (bit(bb) | bit(c))) continue;
+				const out: Array<{ i: number; d: number }> = [];
+				for (let i = 0; i < 81; i++) {
+					if (i === pivot || i === p1 || i === p2 || b.grid[i] !== 0 || !(b.cand[i] & bit(c))) continue;
+					if (PEERS[i].includes(p1) && PEERS[i].includes(p2)) out.push({ i, d: c });
+				}
+				if (!out.length) continue;
+				return {
+					technique: 'y-wing',
+					grade: 5,
+					eliminate: out,
+					focus: [pivot, p1, p2],
+					message: `${cellName(pivot)} can only be ${a} or ${bb}. If it is ${a}, then ${cellName(p1)} (${a} or ${c}) must be ${c}. If it is ${bb}, then ${cellName(p2)} (${bb} or ${c}) must be ${c}. Either way one of those two squares is a ${c}, so a square that sees both of them cannot be a ${c}.`,
+					idea: `Look at ${cellName(pivot)}, which has only two candidates left, and at the two squares it sees that also have two candidates each.`,
+				};
+			}
+		}
+	}
+	return null;
+}
+
 function nextStepFor(b: Board, maxGrade: number): SudokuStep | null {
 	return (
 		nakedSingle(b) ??
@@ -446,7 +482,7 @@ function nextStepFor(b: Board, maxGrade: number): SudokuStep | null {
 		(maxGrade >= 2 ? lockedCandidates(b) : null) ??
 		(maxGrade >= 3 ? (nakedSubset(b) ?? hiddenPair(b)) : null) ??
 		(maxGrade >= 4 ? xWing(b) : null) ??
-		(maxGrade >= 5 ? skyscraper(b) : null)
+		(maxGrade >= 5 ? (skyscraper(b) ?? yWing(b)) : null)
 	);
 }
 

@@ -8,7 +8,7 @@
 //   node tools/sudoku-example.ts --steps 200 [--level hard] [--from 1000]              (how many solver steps boards need)
 // --raw N uses random one-solution boards with about N givens instead of the game's boards. Skyscraper (grade 5) is
 // never used by the game, so its examples and numbers only make sense on raw boards the four-grade solver gets stuck on.
-// Techniques: naked-single hidden-single pointing claiming naked-subset hidden-pair x-wing.
+// Techniques: naked-single hidden-single pointing claiming naked-subset hidden-pair x-wing skyscraper y-wing.
 // For naked-subset, --size 2 or 3 picks pairs or triples (the number of squares in the group).
 // Without --write it prints the facts a guide may quote. With --write it also draws two boards, before and after
 // the step, with the pencil marks of the squares involved (removed candidates struck through in red).
@@ -30,7 +30,7 @@ const stepStats = Number(opt('--steps', '0'));
 const snyder = args.includes('--snyder');
 const from = Number(opt('--from', '1000'));
 const raw = Number(opt('--raw', '0'));
-const maxGrade = Number(opt('--max-grade', tech === 'skyscraper' ? '5' : '4'));
+const maxGrade = Number(opt('--max-grade', tech === 'skyscraper' || tech === 'y-wing' ? '5' : '4'));
 const boardFor = (sd: number): { givens: number[] } => (raw ? rawPuzzle(sd, raw) : generateSudoku(sd, level));
 
 const keyOf = (s: SudokuStep): string => (s.technique === 'naked-subset' || s.technique === 'hidden-pair' ? `${s.technique}:${s.focus.length}` : s.technique);
@@ -115,7 +115,7 @@ if (stats > 0) {
 		}
 		new Set(r.steps.map(keyOf)).forEach((k) => (count[k] = (count[k] ?? 0) + 1));
 	}
-	const extra = raw ? { rawClues: raw, solvedWithinGrade4: byGrade4, needSkyscraperToFinish: onlyWithSkyscraper, notSolvedEvenWithSkyscraper: stats - solved } : { level };
+	const extra = raw ? { rawClues: raw, solvedWithinGrade4: byGrade4, needGrade5ToFinish_skyscraperOrYWing: onlyWithSkyscraper, notSolvedEvenWithGrade5: stats - solved } : { level };
 	console.log(JSON.stringify({ ...extra, boards: stats, from, solved, boardsUsingTechnique: count }, null, 1));
 	process.exit(0);
 }

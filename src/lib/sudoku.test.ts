@@ -58,8 +58,9 @@ test('the solver finds an X-Wing on a known position', () => {
 	assert.ok(found > 0, 'no X-Wing appeared in 60 hard boards');
 });
 
-test('skyscraper never removes a digit that belongs in the solution, and it does turn up on hard raw boards', () => {
+test('skyscraper and y-wing never remove a digit that belongs in the solution, and both turn up on hard raw boards', () => {
 	let seen = 0;
+	let yWings = 0;
 	for (let seed = 1; seed <= 120; seed++) {
 		const p = rawPuzzle(seed, 24);
 		const b = boardFrom(p.givens);
@@ -69,6 +70,11 @@ test('skyscraper never removes a digit that belongs in the solution, and it does
 		while ((step = nextSudokuStep(b, 5)) && guard++ < 600) {
 			for (const e of step.eliminate ?? []) assert.notEqual(p.solution[e.i], e.d, `seed ${seed}: ${step.technique} removed a true digit`);
 			if (step.place) assert.equal(p.solution[step.place.i], step.place.d, `seed ${seed}: wrong placement`);
+			if (step.technique === 'y-wing') {
+				yWings++;
+				assert.equal(step.focus.length, 3);
+				assert.equal(step.grade, 5);
+			}
 			if (step.technique === 'skyscraper') {
 				seen++;
 				assert.equal(step.focus.length, 4);
@@ -78,9 +84,10 @@ test('skyscraper never removes a digit that belongs in the solution, and it does
 		}
 	}
 	assert.ok(seen > 0, 'no skyscraper found in 120 boards, the test would prove nothing');
+	assert.ok(yWings > 0, 'no y-wing found in 120 boards, the test would prove nothing');
 });
 
-test('the game itself never uses skyscraper: default hints stop at grade 4', () => {
+test('the game itself never uses skyscraper or y-wing: default hints stop at grade 4', () => {
 	for (let seed = 1; seed <= 40; seed++) {
 		const p = rawPuzzle(seed, 24);
 		const b = boardFrom(p.givens)!;
@@ -88,6 +95,7 @@ test('the game itself never uses skyscraper: default hints stop at grade 4', () 
 		let guard = 0;
 		while ((step = nextSudokuStep(b)) && guard++ < 600) {
 			assert.notEqual(step.technique, 'skyscraper');
+			assert.notEqual(step.technique, 'y-wing');
 			applyStep(b, step);
 		}
 	}
