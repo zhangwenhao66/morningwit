@@ -139,4 +139,89 @@ export const guides: Guide[] = [
 			{ label: 'Sudoku X-Wing, Learn-Sudoku', url: 'https://www.learn-sudoku.com/x-wing.html' },
 		],
 	},
+	{
+		slug: 'how-to-solve-star-battle-puzzles',
+		category: 'Star Battle',
+		title: 'How to solve Star Battle puzzles: a 6x6 from the first mark',
+		description:
+			'Start with the smallest region, then count rows and columns. A 6x6 Star Battle board solved move by move, with how often each idea is needed at 5x5, 6x6 and 8x8.',
+		published: '2026-09-30',
+		updated: '2026-09-30',
+		coreSummary:
+			'Start with a region whose open squares all sit in one row or column, and cross out the rest of that line. Then count how many lines a group of regions fits inside. Once regions are down to one square, place the stars.',
+		sections: [
+			{
+				heading: 'Where to look first',
+				body: [
+					'The rules fit in two lines, for the version of the puzzle with one star per line. Every row, column and bold region holds exactly one star, and no two stars may touch, not even at a corner.',
+					'The smallest regions tell you the most, so start there. On the 6x6 board below, region A is two squares wide and one tall. Its star has to be in row 1, so no other region can put a star in row 1. Cross out the rest of the row.',
+					'Region C does the same in column 6, because all its open squares sit in that column. Neither move places a star, but both shrink the board. The solver calls this move "confined". It came up at least once on 197 of 200 generated boards at 8x8.',
+				],
+				image: {
+					src: '/images/star-battle-6-1000-step0-1.svg',
+					alt: 'A 6x6 Star Battle board split into six lettered regions. The two squares of region A, in the top left corner of row 1, are outlined in red.',
+				},
+			},
+			{
+				heading: 'The move that opens the board',
+				body: [
+					'Two moves in, the board looks stuck, with no region down to one square. Look at columns instead.',
+					'Region A sits in columns 1 and 2. So does region D, the yellow one, every square of it. Two regions, two columns. Each region needs a star, so between them they fill both columns, and no other region can put a star in column 1 or 2. Cross out every other square in those columns.',
+					'The solver calls this "group". It is the first move again, counting two regions against two lines.',
+				],
+				image: {
+					src: '/images/star-battle-6-1000-step2-1.svg',
+					alt: 'The same board with crosses along row 1 and column 6 from the first two moves. Every square of regions A and D in columns 1 and 2 is outlined in red.',
+				},
+			},
+			{
+				heading: 'The rest is bookkeeping',
+				body: [
+					'After the group move, region E has one open square, row 5 column 3, so the star goes there. Region B is now confined to row 2 and clears the rest of that row. Then C, B, F, D and A each run out of options but one square, in turn. Ten moves in all: four cross-outs and six placements.',
+					'The finished board has six stars, one per row, column and region, none touching.',
+				],
+				image: {
+					src: '/images/star-battle-6-1000-step9-2.svg',
+					alt: 'The finished 6x6 board with six stars: row 1 column 2, row 2 column 4, row 3 column 6, row 4 column 1, row 5 column 3 and row 6 column 5. Several other squares are crossed out.',
+				},
+			},
+			{
+				heading: 'How often the group move shows up',
+				body: [
+					'On small boards you can often skip it. The solver tries the simpler moves first, and across 200 generated boards per size it ended up using the group move on 39 of the 6x6 boards (19.5%) and 78 of the 8x8 boards (39%). These counts come from solver runs, not from people playing. So on 8x8, expect to need group counting about two times in five.',
+				],
+			},
+			{
+				heading: 'When you are stuck',
+				body: [
+					'Run the checks in this order: a region confined to one row or column, then N regions that fit inside N lines, then any region with one open square. If none fires, look at touching. A star crosses out the eight squares around it, and that can leave another region with a single choice.',
+					'Try the same sequence on the [Star Battle page](/play/star-battle/). The hints work in three steps: where to look, what pattern is there, and only then the star.',
+				],
+			},
+		],
+		faq: [
+			{
+				question: 'Where should I start on a Star Battle puzzle?',
+				answer:
+					'Look for a region that is boxed into a single line, and small ones usually are. Its star must land in that line, so nothing else in that line can hold one.',
+			},
+			{
+				question: 'Can two stars touch diagonally?',
+				answer: 'No. Stars cannot sit in cells that share an edge or a corner.',
+			},
+			{
+				question: 'How do I know a group move applies?',
+				answer:
+					'Count the regions and the lines. If N regions fit entirely inside N rows or N columns, their stars fill those lines and everything else in them can go.',
+			},
+			{
+				question: 'Do you ever have to guess?',
+				answer:
+					'Not on this site. The board above was completed by the solver with these moves and no guessing, and the boards here are generated so that logic is enough.',
+			},
+		],
+		sources: [
+			{ label: 'Star Battle Rules and Info, The Art of Puzzles (GM Puzzles)', url: 'https://www.gmpuzzles.com/blog/star-battle-rules-and-info/' },
+		],
+	},
 ];
