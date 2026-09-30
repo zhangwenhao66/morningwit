@@ -144,7 +144,7 @@ export const guides: Guide[] = [
 		category: 'Star Battle',
 		title: 'How to solve Star Battle puzzles: a 6x6 from the first mark',
 		description:
-			'Start with the smallest region, then count rows and columns. A 6x6 Star Battle board solved move by move, with how often each idea is needed at 5x5, 6x6 and 8x8.',
+			'Start with the smallest region, then count rows and columns. A 6x6 Star Battle board solved move by move, with how often each idea is needed at 6x6 and 8x8.',
 		published: '2026-09-30',
 		updated: '2026-09-30',
 		coreSummary:
