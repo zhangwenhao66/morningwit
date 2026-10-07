@@ -224,4 +224,105 @@ export const guides: Guide[] = [
 			{ label: 'Star Battle Rules and Info, The Art of Puzzles (GM Puzzles)', url: 'https://www.gmpuzzles.com/blog/star-battle-rules-and-info/' },
 		],
 	},
+	{
+		slug: 'hidden-pairs-sudoku',
+		category: 'Sudoku strategy',
+		title: 'Hidden pairs in Sudoku: three boards to try before the answer',
+		description:
+			'A hidden pair is two digits that fit in only the same two squares of a row, column or box. Try three real boards, then check the answers and how rarely the move is needed.',
+		published: '2026-10-07',
+		updated: '2026-10-07',
+		coreSummary:
+			'A hidden pair is two digits that, within one row, column or box, fit in only the same two squares. Those squares must hold exactly those two digits, so every other candidate in them can be crossed out.',
+		sections: [
+			{
+				heading: 'What to look for',
+				body: [
+					'Pick a row, column or box and find two digits that each have just two places left in it, the same two places for both. Those squares are the hidden pair. They usually list other candidates too, and that is what hides the pair. Those extras are what you remove.',
+				],
+			},
+			{
+				heading: 'Try it first',
+				body: [
+					'Here are three boards. For each, the text says where the two digits can still go and what the squares list, and you decide what has to go before reading the answer.',
+					'On Board 1, the digits 1 and 4 fit only in row 8, in column 2 and column 6. Column 2 lists 1, 3 and 4. Column 6 lists 1, 4, 5 and 7.',
+					'On Board 2, the digits 5 and 6 fit only in row 1, in column 3 and column 5. Column 3 lists 2, 5, 6, 7 and 9. Column 5 lists 5, 6 and 9.',
+					'On Board 3, the digits 4 and 9 fit only in column 8, in row 1 and row 2. Row 1 lists 4, 5, 6, 7, 8 and 9. Row 2 lists 1, 4, 5, 6, 7 and 9.',
+				],
+			},
+			{
+				heading: 'Board 1, a row',
+				body: [
+					'Row 8 needs a 1 and a 4, and those two squares are the only places left for them. So the squares hold exactly 1 and 4. The square in column 2 loses its 3, and the one in column 6 loses its 5 and 7. Three candidates gone.',
+					'The pictures show pencil marks only for the two squares involved. The rest of each board is left bare.',
+				],
+				image: {
+					src: '/images/sudoku-hidden-pair-4-2.svg',
+					alt: 'A Sudoku board with two squares in row 8 outlined. The left one keeps the candidates 1 and 4 with the 3 crossed out. The right one keeps 1 and 4 with the 5 and 7 crossed out.',
+				},
+			},
+			{
+				heading: 'Board 2',
+				body: [
+					'Board 2 is the same move in a row. The square in column 3 loses 2, 7 and 9, and the one in column 5 loses 9. Both squares end up as 5 and 6.',
+				],
+				image: {
+					src: '/images/sudoku-hidden-pair-8-2.svg',
+					alt: 'A Sudoku board with two squares in row 1 outlined, in columns 3 and 5. Both keep the candidates 5 and 6. The 2, 7 and 9 in the left square and the 9 in the right square are crossed out.',
+				},
+			},
+			{
+				heading: 'Board 3, a column, and the biggest clear-out',
+				body: [
+					'This one runs down column 8 and removes eight candidates. The square in row 1 loses 5, 6, 7 and 8, and the one in row 2 loses 1, 5, 6 and 7. Both squares end up as 4 and 9.',
+				],
+				image: {
+					src: '/images/sudoku-hidden-pair-133-2.svg',
+					alt: 'A Sudoku board with two squares at the top of column 8 outlined. Both keep the candidates 4 and 9, and eight other candidates between them are crossed out.',
+				},
+			},
+			{
+				heading: 'Why it holds',
+				body: [
+					'Back to Board 1: row 8 needs a 1, and only two squares can take it. It needs a 4, and only the same two squares can take it. Two digits and two squares, so each square gets one of them and nothing else fits.',
+					'It is the mirror image of a naked pair. A naked pair says two squares list only two candidates between them. A hidden pair says two digits have only two squares between them. In both, the same two squares end up holding the same two digits.',
+				],
+			},
+			{
+				heading: 'Where it goes wrong',
+				body: [
+					'Both digits must be confined to the same two squares. If the 1 fits in two squares of the row and the 4 in three, there is no pair. If a third square can also take the 1, the argument is gone.',
+					'A common slip is crossing out the pair digits themselves. In the answers above the 1s and 4s stay and everything else in those squares goes.',
+					'And scan by digit across a unit, not square by square. In Board 1 column 6 lists 1, 4, 5 and 7, so looking at that square alone you would never call it a pair.',
+				],
+			},
+			{
+				heading: 'How often you need it',
+				body: [
+					'Of 200 hard boards the game generated, the solver used a hidden pair on 9 (4.5%), so you will rarely need it. It used naked pairs on 166 (83%) and pointing on 171 (85.5%). The solver tries simpler moves first, so these counts say how often a board needed the move at all, not how often it could be spotted.',
+					'When you are stuck, run through singles, pointing and naked pairs, then come back here. You can practise on the same kind of board on the [Sudoku page](/play/sudoku/). For another pattern that only clears candidates, see [X-Wing](/learn/x-wing-sudoku/).',
+				],
+			},
+		],
+		faq: [
+			{
+				question: 'What is the difference between a hidden pair and a naked pair?',
+				answer:
+					'In a naked pair the squares themselves are bare: two squares, two candidates. In a hidden pair the squares look crowded, but two of their digits have nowhere else to go in that group of nine squares. The end result is the same, two squares holding two digits.',
+			},
+			{
+				question: 'Does a hidden pair place a digit?',
+				answer: 'Not by itself. It removes candidates. A placement may follow once a square is down to one candidate or a digit has one home left.',
+			},
+			{
+				question: 'Can a hidden pair sit in a box?',
+				answer: 'Yes. Rows, columns and boxes all work. The boards here use a row and a column.',
+			},
+			{
+				question: 'Is there a hidden triple?',
+				answer: 'Yes, the same idea with three digits and three squares. It is harder to spot, and the solver on this site does not use it.',
+			},
+		],
+		sources: [{ label: 'Hidden Pairs, Learn-Sudoku', url: 'https://www.learn-sudoku.com/hidden-pairs.html' }],
+	},
 ];
