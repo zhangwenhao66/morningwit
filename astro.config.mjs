@@ -4,7 +4,7 @@ import { defineConfig } from 'astro/config';
 import { sitemapConfig } from './vendor/site-toolkit/packages/sitemap-config/src/index.ts';
 import { guides } from './src/data/guides.ts';
 
-const shared = sitemapConfig();
+const shared = sitemapConfig({ excludePaths: ['/contact/'] });
 
 export default defineConfig({
 	site: 'https://morningwit.com',
