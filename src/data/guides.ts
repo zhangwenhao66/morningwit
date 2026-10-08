@@ -325,4 +325,90 @@ export const guides: Guide[] = [
 		],
 		sources: [{ label: 'Hidden Pairs, Learn-Sudoku', url: 'https://www.learn-sudoku.com/hidden-pairs.html' }],
 	},
+	{
+		slug: 'how-to-solve-hard-sudoku-without-guessing',
+		category: 'Sudoku strategy',
+		title: 'How to solve a hard Sudoku without guessing, one board from start to finish',
+		description:
+			'On hard boards, singles and pointing get you most of the way and a pair or triple usually finishes the job. Follow one real board from 26 givens to the end, with counts from 200.',
+		published: '2026-10-08',
+		updated: '2026-10-08',
+		coreSummary:
+			"Work in a fixed order: singles first, then pointing and claiming, then pairs and triples. On 200 hard boards from this site's game, none finished on singles, pointing and claiming alone, 193 finished once pairs, triples and hidden pairs were allowed, and the last 7 needed an X-Wing. No board needed a guess.",
+		sections: [
+			{
+				heading: 'Which moves hard boards use',
+				body: [
+					"Hard boards add a few moves that easy ones never need. Here is how often a solver working through 200 hard boards from this site's game (seeds 1000 to 1199) needed each move at least once.",
+					'Singles, naked and hidden, appeared on all 200 boards. Pointing appeared on 171 (85.5%), naked pairs on 166 (83%), claiming on 98 (49%), naked triples on 49 (24.5%), hidden pairs on 9 (4.5%) and X-Wing on 7 (3.5%).',
+					'The solver always tries the simpler move first, so these counts show how often a board needed a move at all, not how often you could spot one. All 200 boards finished with these moves and no trial and error.',
+					'That list is also your search order. Check singles, then pointing and claiming, then pairs, and only then look for anything rarer.',
+				],
+			},
+			{
+				heading: 'One board from the start',
+				body: [
+					'Board 1000 from that run has 26 givens and 55 empty squares.',
+					'The first stretch is plain: naked and hidden singles go in one after another. Along the way the solver found three pointing moves, each time a digit confined to one line of a box wiping that digit from the rest of the line. By step 34 it had placed 31 digits, and 24 squares were still empty.',
+				],
+				image: {
+					src: '/images/sudoku-hard-1000-1.svg',
+					alt: 'A 9 by 9 Sudoku at the start, with 26 digits given and 55 empty squares.',
+				},
+			},
+			{
+				heading: 'Where it stalled, and the move that freed it',
+				body: [
+					'At that point no single, pointing or claiming move was left. This is where people reach for a guess. The top-middle box has a way out.',
+					'Two squares in it, row 2 column 5 and row 3 column 6, can hold only 1 and 9. Those two squares must use up the 1 and the 9 between them, so neither digit can sit anywhere else in the box. The other three empty squares lose five candidates in all, and row 2 column 4 is left with just the 5.',
+					'That is a naked pair, the only move of its kind on the whole board.',
+				],
+				image: {
+					src: '/images/sudoku-hard-1000-2.svg',
+					alt: 'The same Sudoku with 24 empty squares. In the top-middle box the two outlined squares hold only 1 and 9, and the 1s and 9s in the other three empty squares of the box are crossed out in red.',
+				},
+			},
+			{
+				heading: 'After the pair',
+				body: [
+					'The 5 went in, and the rest of the board followed. Steps 36 to 59 were all naked singles, 24 digits in a row with no choices left. The whole board took 59 steps: 55 digits placed, three pointing moves and one pair.',
+					'Singles did 55 of those 59 steps. The pair mattered only because it came at the moment singles ran dry.',
+				],
+			},
+			{
+				heading: 'How far the ordered list goes',
+				body: [
+					'On the same 200 hard boards, a solver limited to singles, pointing and claiming finished none of them. Allowing naked pairs and triples and hidden pairs, it finished 193. The last 7 also needed an X-Wing, covered in [the X-Wing guide](/learn/x-wing-sudoku/).',
+					'On boards like these, the gap between stuck and solved is almost always a pair or a triple, so look there before anything exotic. If the pair is hiding, [the hidden pairs guide](/learn/hidden-pairs-sudoku/) has three boards to practise on.',
+				],
+			},
+			{
+				heading: 'When the list runs out',
+				body: [
+					'Boards from the game are checked so that a person-style solver can finish them. Puzzles from elsewhere carry no such promise. In a separate test of 300 random one-solution boards with 24 givens, the same solver with its four levels of technique finished 190. Adding Skyscraper and Y-Wing finished another 34, and 76 stayed unsolved. If you hit one of those, the cause may be a pattern outside this list rather than something you missed.',
+					'For everyday hard boards the habit is simple: after every removal, rescan for singles before you reach for a new idea. You can try it on a board with named hints on the [Sudoku page](/play/sudoku/).',
+				],
+			},
+		],
+		faq: [
+			{
+				question: 'Can every hard Sudoku be solved without guessing?',
+				answer:
+					'Every one of the 200 hard boards tested here could, using singles, pointing, claiming, pairs, triples, hidden pairs and X-Wing. Puzzles from other sources can need patterns beyond that list.',
+			},
+			{
+				question: 'What should I try first on a hard Sudoku?',
+				answer: 'Singles. Rescan for new ones after each removal, and only when they run out do the heavier patterns come in.',
+			},
+			{
+				question: 'How many steps does a hard Sudoku take?',
+				answer: 'About 60 on the game\'s hard boards. Board 1000 took 59: 55 digits placed and four removals. Most of the work is singles.',
+			},
+			{
+				question: 'Is a naked pair a guess?',
+				answer: 'No. The two squares can hold only the same two digits, so those digits cannot appear elsewhere in the unit. Nothing is tried and undone.',
+			},
+		],
+		sources: [{ label: 'Naked Pairs, Learn-Sudoku', url: 'https://www.learn-sudoku.com/naked-pairs.html' }],
+	},
 ];
