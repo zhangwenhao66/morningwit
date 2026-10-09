@@ -385,7 +385,7 @@ export const guides: Guide[] = [
 			{
 				heading: 'When the list runs out',
 				body: [
-					'Boards from the game are checked so that a person-style solver can finish them. Puzzles from elsewhere carry no such promise. In a separate test of 300 random one-solution boards with 24 givens, the same solver with its four levels of technique finished 190. Adding Skyscraper and Y-Wing finished another 34, and 76 stayed unsolved. If you hit one of those, the cause may be a pattern outside this list rather than something you missed.',
+					'Boards from the game are checked so that a person-style solver can finish them. Puzzles from elsewhere carry no such promise. In a separate test of 300 random one-solution boards requested with 24 givens, the same solver with its four levels of technique finished 190. Adding Skyscraper and Y-Wing finished another 34, and 76 stayed unsolved. If you hit one of those, the cause may be a pattern outside this list rather than something you missed.',
 					'For everyday hard boards the habit is simple: after every removal, rescan for singles before you reach for a new idea. You can try it on a board with named hints on the [Sudoku page](/play/sudoku/).',
 				],
 			},
@@ -411,4 +411,98 @@ export const guides: Guide[] = [
 		],
 		sources: [{ label: 'Naked Pairs, Learn-Sudoku', url: 'https://www.learn-sudoku.com/naked-pairs.html' }],
 	},
+
+{
+  slug: "skyscraper-sudoku",
+  category: "Sudoku strategy",
+  title: "Skyscraper Sudoku: prove the move with two possible cases",
+  description: "See why a Skyscraper removes candidates in Sudoku. Two conditional diagrams prove the move on a generated board, with the exact cells to cross out.",
+  published: "2026-10-09",
+  updated: "2026-10-09",
+  coreSummary: "A Skyscraper uses one digit with exactly two candidate cells in each of two rows or columns. One candidate from each line shares a crossing line. At least one of the other two cells, the roofs, must hold the digit, so you can remove it from any outside cell that sees both roofs.",
+  sections: [
+    {
+      heading: "Four cells, with one end lined up",
+      body: [
+        "On the example board, row 4 has only two places for 2: r4c6 and r4c7. Row 9 also has only two: r9c4 and r9c7. Here r4c6 means row 4, column 6; count from the top and left.",
+        "The two cells in column 7 are the bases. The other two cells, r4c6 and r9c4, are the roofs. Focus on the candidate 2. Each cell can still contain other digits.",
+        "This position comes from the Morningwit raw generator, seed 3, requested with 24 givens. It actually produced 26 givens because the generator keeps a unique solution. The diagram shows the later position where the logic solver finds a Skyscraper, after earlier moves. These raw boards are outside the set served by the game."
+      ],
+      image: {
+        src: "/images/sudoku-skyscraper-3-1.svg",
+        alt: "Sudoku position with the four Skyscraper cells outlined. Rows 4 and 9 each have two candidates for 2, sharing column 7."
+      }
+    },
+    {
+      heading: "Case A: put 2 in the upper base",
+      body: [
+        "Suppose r4c7 is 2. Column 7 cannot contain another 2, so r9c7 cannot be 2. Row 9 has only one place left for it: r9c4, the lower roof.",
+        "The filled 2s in this diagram are conditional placements for the proof. They are not instructions to fill those cells on your board."
+      ],
+      image: {
+        src: "/images/skyscraper-case-a.svg",
+        alt: "Conditional case A: a 2 in row 4 column 7 forces a 2 in row 9 column 4. The four original pattern cells remain outlined."
+      }
+    },
+    {
+      heading: "Case B leaves the upper roof",
+      body: [
+        "Now suppose r4c7 is not 2. Since row 4 has exactly two places for that digit, r4c6 must be 2. That is the upper roof. The lower row is still undecided.",
+        "These cases cover both possibilities for r4c7. Case A forces the lower roof; case B forces the upper roof. Therefore at least one roof holds 2. The argument does not say which one, or that exactly one roof is true."
+      ],
+      image: {
+        src: "/images/skyscraper-case-b.svg",
+        alt: "Conditional case B: ruling out 2 in row 4 column 7 forces a 2 in row 4 column 6. Row 9 remains undecided."
+      }
+    },
+    {
+      heading: "The two pencil marks you can cross out",
+      body: [
+        "A cell sees another cell when they share a row, column or 3 by 3 box. Any outside cell seeing both roofs would clash with a 2 whichever roof is true.",
+        "On this board, r6c4 sees the upper roof r4c6 through the center box and the lower roof r9c4 through column 4. Remove its candidate 2.",
+        "The other removal is r8c6: it sees r4c6 through column 6 and r9c4 through the bottom-middle box. Remove its 2 as well. Both removals were checked against the generated unique solution: neither cell contains 2 in that solution.",
+        "After removing the two candidates, look again for singles. The Skyscraper itself does not choose a roof or place a digit."
+      ],
+      image: {
+        src: "/images/sudoku-skyscraper-3-2.svg",
+        alt: "The original position with candidate 2 crossed out in row 6 column 4 and row 8 column 6. Neither roof has been filled."
+      }
+    },
+    {
+      heading: "Where this proof breaks",
+      body: [
+        "If either starting row has a third candidate for 2, the forced move in the proof can fail. Recount the whole row, including candidates outside the highlighted boxes.",
+        "A target must see both roofs. Sharing a unit with just one roof is insufficient. Leave the four pattern cells alone when applying the elimination.",
+        "The pattern also works after swapping rows and columns. Unlike the [X-Wing rectangle](/learn/x-wing-sudoku/), these two roofs are in different crossing lines. This is a different scan from checking both ends of a rectangle."
+      ]
+    },
+    {
+      heading: "How often the solver found it",
+      body: [
+        "A run of sudoku-example.ts on 300 raw boards, seeds 1000 through 1299, requested 24 givens per board. The solver used a Skyscraper in 33 of those solving paths. Its ordering tries simpler techniques first and includes Y-Wing at grade 5, so the count covers solving paths that used the technique. It does not count every pattern present on the boards.",
+        "Of those 300 boards, 190 finished within grade 4. Allowing both Skyscraper and Y-Wing finished another 34; 76 still remained unsolved by that set of techniques. The extra 34 cannot be attributed to Skyscraper alone. These figures do not describe the difficulty mix in the [Morningwit Sudoku game](/play/sudoku/), whose generator filters for completion within grade 4."
+      ]
+    }
+  ],
+  faq: [
+    {
+      question: "Do the four cells need only two pencil marks each?",
+      answer: "No. Count the places where your chosen digit fits along each whole starting line: there must be two in one line and two in the other. Other digits in those cells do not affect that count."
+    },
+    {
+      question: "Can both roofs contain the digit?",
+      answer: "The basic proof guarantees at least one roof. It does not guarantee exactly one. Apply the common-peer elimination without choosing a roof."
+    },
+    {
+      question: "Is trying both cases the same as guessing?",
+      answer: "The cases prove one elimination that holds regardless of the upper base. You do not commit to either branch or enter its hypothetical digits on the puzzle."
+    }
+  ],
+  sources: [
+    {
+      label: "HoDoKu: Single Digit Patterns, Skyscraper",
+      url: "https://hodoku.sourceforge.net/en/tech_sdp.php#sk"
+    }
+  ]
+},
 ];

@@ -7,18 +7,18 @@ const MAX = 3;
  * tools/verify-related-guides-coverage.mjs, so the page and the coverage check
  * cannot drift apart).
  *
- * Same-category guides first, then the rest in guides.ts order (Array.sort is
- * stable). Never empty as long as the site has at least two guides, which is
- * why check_singleton_category.py (category counts only) is a false alarm here.
- * The catch: the fixed first-N cut-off means guides late in guides.ts may get
- * no inbound link at all once the library grows; the coverage script reports
- * that as neverLinked.
+ * Same-category suggestions fill the list, with one place reserved for the
+ * next guide in library order. That ring gives every guide an inbound link as
+ * the library grows (2026-10-09: the fifth guide orphaned Star Battle).
  */
 export function pickRelatedGuides<T extends Guide>(allGuides: T[], current: T, max = MAX): T[] {
-	return allGuides
-		.filter((g) => g.slug !== current.slug)
+	if (max <= 0 || allGuides.length < 2) return [];
+	const next = allGuides[(allGuides.findIndex((g) => g.slug === current.slug) + 1) % allGuides.length];
+	const preferred = allGuides
+		.filter((g) => g.slug !== current.slug && g.slug !== next.slug)
 		.sort((a, b) => Number(b.category === current.category) - Number(a.category === current.category))
-		.slice(0, max);
+		.slice(0, max - 1);
+	return [...preferred, next];
 }
 
 export interface RelatedGuidesCoverageReport {
