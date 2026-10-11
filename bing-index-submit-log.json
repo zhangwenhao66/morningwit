@@ -1,5 +1,29 @@
 [
   {
+    "date": "2026-09-30",
+    "site": "morningwit.com",
+    "action": "submitted",
+    "submitted_urls": [
+      "https://morningwit.com/learn/how-to-solve-star-battle-puzzles/",
+      "https://morningwit.com/learn/x-wing-sudoku/",
+      "https://morningwit.com/play/binairo/",
+      "https://morningwit.com/play/star-battle/",
+      "https://morningwit.com/play/sudoku/",
+      "https://morningwit.com/play/word-box/"
+    ],
+    "method": "SubmitUrlBatch"
+  },
+  {
+    "date": "2026-10-08",
+    "site": "morningwit.com",
+    "action": "submitted",
+    "submitted_urls": [
+      "https://morningwit.com/learn/hidden-pairs-sudoku/",
+      "https://morningwit.com/learn/how-to-solve-hard-sudoku-without-guessing/"
+    ],
+    "method": "SubmitUrlBatch"
+  },
+  {
     "date": "2026-10-09",
     "site": "morningwit.com",
     "action": "submitted",
