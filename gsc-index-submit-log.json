@@ -9,17 +9,28 @@
   "quota_exceeded_attempted": [],
   "quota_used": "1"
  },
-{
+ {
   "date": "2026-10-09",
   "run_id": "20261009T150500",
   "note": "老页巡检优先；真实CUA确认Indexing requested",
   "submitted_urls": [
-    "https://morningwit.com/learn/how-to-solve-hard-sudoku-without-guessing/"
+   "https://morningwit.com/learn/how-to-solve-hard-sudoku-without-guessing/"
   ],
   "status_before": "URL is unknown to Google",
   "result": "Indexing requested",
   "quota_exceeded_attempted": [],
   "quota_used": "1",
   "receipt": "/Users/zhangwh/.codex/automation-runtime/runs/trafficsite-gsc-index-requests/20261009T150500/request-morningwit-learn-how-to-solve-hard-sudoku-without-guessing.json"
-}
+ },
+ {
+  "date": "2026-10-12",
+  "run_id": "20261012T1523",
+  "note": "游标轮到；队列首位候选 URL Inspection 结果 URL is on Google，已收录不提交；本轮只核了队列首位（未检查项）",
+  "submitted_urls": [],
+  "already_indexed_no_action": [
+   "https://morningwit.com/learn/x-wing-sudoku/"
+  ],
+  "quota_exceeded_attempted": [],
+  "quota_used": "0"
+ }
 ]
