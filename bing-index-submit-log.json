@@ -31,5 +31,14 @@
       "https://morningwit.com/learn/skyscraper-sudoku/"
     ],
     "method": "SubmitUrl"
+  },
+  {
+    "date": "2026-10-12",
+    "site": "morningwit.com",
+    "action": "submitted",
+    "submitted_urls": [
+      "https://morningwit.com/learn/snyder-notation-sudoku/"
+    ],
+    "method": "SubmitUrl"
   }
 ]
