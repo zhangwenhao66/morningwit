@@ -505,4 +505,100 @@ export const guides: Guide[] = [
     }
   ]
 },
+
+{
+  slug: "snyder-notation-sudoku",
+  category: "Sudoku basics",
+  title: "Snyder notation in Sudoku: one board written two ways",
+  description: "Snyder notation writes a candidate only where a digit has exactly two possible squares in its box. See one generated board marked both ways, and the counts from 60 more boards.",
+  published: "2026-10-12",
+  updated: "2026-10-12",
+  coreSummary: "Snyder notation is a way of writing pencil marks in which you note a digit inside a 3 by 3 box only when that digit has exactly two possible squares left in the box. Every digit with three or more places to go stays off the board.",
+  sections: [
+    {
+      heading: "The whole rule",
+      body: [
+        "Full pencil marks means writing, in every empty square, every digit that can still go there. Snyder notation cuts that down with one test, applied box by box. Pick a digit and count the squares inside the box where it could still go. If the answer is exactly two, write the digit in both squares. If it is three or more, write nothing.",
+        "That is the entire method. It is named after Thomas Snyder, an American solver and puzzle author who has won the [World Sudoku Championship](https://en.wikipedia.org/wiki/Thomas_Snyder) three times, and the guides that cover it credit him with developing it.",
+        "There is no single canonical statement of the rule, and the guides differ at the edges. A few write the test wider and also keep digits that have three squares open. Most use the two-square form, which is the one used here."
+      ]
+    },
+    {
+      heading: "Every candidate, all 154 of them",
+      body: [
+        "The first board is full pencil marks: every empty square carrying its complete candidate list, stacked in the corner, 154 small digits in all.",
+        "Nothing you might want later has been thrown away. On a board this open, that is the problem."
+      ],
+      image: {
+        src: "/images/sudoku-snyder-1-1.svg",
+        alt: "A generated medium Sudoku at its starting position with full pencil marks. The 32 given digits are large, and every empty square carries its complete candidate list in small digits, 154 in all."
+      }
+    },
+    {
+      heading: "The same board in Snyder notation",
+      body: [
+        "The second board applies the test box by box. All 32 givens are untouched. The small digits drop from 154 to 30.",
+        "Seven of the nine boxes contribute at least one mark. The top left and bottom right boxes contribute none, because no digit in those two boxes had exactly two squares open."
+      ],
+      image: {
+        src: "/images/sudoku-snyder-1-2.svg",
+        alt: "The same Sudoku starting position with Snyder marks only. The 32 givens are unchanged, and just 30 small digits appear, written only where a digit has exactly two possible squares in its box."
+      }
+    },
+    {
+      heading: "Why the count falls so far",
+      body: [
+        "One board is a single case, so the same test was run over 60 medium boards at their starting positions. Full pencil marks averaged 160.3 digits per board, the lowest 146 and the highest 179. Snyder notation averaged 25.4, between 10 and 40. The marks that survive come to about 16% of the full set.",
+        "The arithmetic does most of the explaining. A box holds nine squares, and in a fresh medium puzzle most boxes are still loose. Over the same 60 boards, 26% of the digit and box pairs had exactly two squares open and got marked. Another 10% had just one square open, which is a hidden single waiting to be placed rather than a question of notation. The remaining 64% sat in three or more squares and got nothing written.",
+        "The board above is a medium board from the site's own Sudoku generator, the same one behind the game. The averages come from running the same box-by-box test over 60 medium boards, counting one mark for each digit written in each square."
+      ]
+    },
+    {
+      heading: "What it drops, and what that costs you",
+      body: [
+        "Every digit with three or more possible squares is missing, and some of them matter. A pattern that runs along a whole row or column, an [X-Wing](/learn/x-wing-sudoku/) for instance, needs to know every square a digit can occupy. Snyder marks alone do not tell you that. The guides that teach the method describe it as a starting notation for easier boards. One of them notes that it stops helping on sparse or expert grids until you begin placing digits.",
+        "A second problem sits inside a single box. Because you have not written every candidate, a square can look like it has only one option left when several others are still possible. A square is only a single once every other digit that could go there has been accounted for, and Snyder marks do not account for them."
+      ]
+    },
+    {
+      heading: "Two things that go wrong",
+      body: [
+        "The two squares have to sit inside the same box. A digit with two possible squares in a row but four inside its box does not qualify, and writing it in produces a mark that means nothing.",
+        "Marks also go stale. When you place a digit it stops being a candidate in its row, column and box, so a digit that had three squares inside a box can drop to two and now deserves a mark it did not have a moment ago."
+      ]
+    },
+    {
+      heading: "When to switch",
+      body: [
+        "While the grid is loose, Snyder marks are usually enough and they keep the board readable. Once a move needs the full candidate map, stop adding marks and write the whole box out instead of patching around the gaps.",
+        "The [Sudoku game here](/play/sudoku/) has a pencil notes button and an auto-notes button. Auto-notes writes every candidate for you, which is the full-notation shortcut. Play a medium board with the pencil on and count what you write by hand, then compare that with the 30 marks above.",
+        "For a board where the full map is the whole point, see [how to solve a hard Sudoku without guessing](/learn/how-to-solve-hard-sudoku-without-guessing/). A pattern that only removes candidates, and needs the complete list to work at all, is covered in [hidden pairs](/learn/hidden-pairs-sudoku/)."
+      ]
+    }
+  ],
+  faq: [
+    {
+      question: "Is Snyder notation a solving technique?",
+      answer: "No. It changes what you write down and nothing else. Every deduction still comes from the ordinary techniques, and the notation only decides which candidates are visible when you look for them."
+    },
+    {
+      question: "Do I mark a digit that fits in two squares of a row but not of its box?",
+      answer: "No. The box is what the rule counts. A digit confined to two squares in a row may still have four squares open inside its box, and it gets no mark until the box count itself falls to two."
+    },
+    {
+      question: "Is Snyder notation faster than full pencil marks?",
+      answer: "On the starting positions of 60 medium boards it wrote about 16% as many digits, 25.4 against 160.3. Whether that makes solving faster depends on how often you need the candidates it left out."
+    },
+    {
+      question: "Who is Snyder notation named after?",
+      answer: "It takes Thomas Snyder's name. He is an American puzzle author and a three-time winner of the world Sudoku title, and he is credited with developing the method."
+    }
+  ],
+  sources: [
+    { label: "Thomas Snyder, Wikipedia", url: "https://en.wikipedia.org/wiki/Thomas_Snyder" },
+    { label: "How to Use Snyder Notation in Sudoku, Minimal Sudoku", url: "https://www.minimal-sudoku.com/learn/snyder" },
+    { label: "How to Use Snyder Notation in Sudoku, SudokuBliss", url: "https://sudokubliss.com/guides/snyder-notation" },
+    { label: "Snyder Notation Sudoku, Sudoku Challenges", url: "https://blog.sudokuchallenges.com/learn-to-play/intermediate-sudoku/snyder-notation-sudoku/" }
+  ]
+},
 ];
