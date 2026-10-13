@@ -380,6 +380,7 @@ export const guides: Guide[] = [
 				body: [
 					'On the same 200 hard boards, a solver limited to singles, pointing and claiming finished none of them. Allowing naked pairs and triples and hidden pairs, it finished 193. The last 7 also needed an X-Wing, covered in [the X-Wing guide](/learn/x-wing-sudoku/).',
 					'On boards like these, the gap between stuck and solved is almost always a pair or a triple, so look there before anything exotic. If the pair is hiding, [the hidden pairs guide](/learn/hidden-pairs-sudoku/) has three boards to practise on.',
+					'Those numbers say which techniques a board needs. For where its moves actually go, and how few of them remove anything, see [how to solve Sudoku quickly](/learn/how-to-solve-sudoku-quickly/).',
 				],
 			},
 			{
@@ -572,7 +573,7 @@ export const guides: Guide[] = [
       body: [
         "While the grid is loose, Snyder marks are usually enough and they keep the board readable. Once a move needs the full candidate map, stop adding marks and write the whole box out instead of patching around the gaps.",
         "The [Sudoku game here](/play/sudoku/) has a pencil notes button and an auto-notes button. Auto-notes writes every candidate for you, which is the full-notation shortcut. Play a medium board with the pencil on and count what you write by hand, then compare that with the 30 marks above.",
-        "For a board where the full map is the whole point, see [how to solve a hard Sudoku without guessing](/learn/how-to-solve-hard-sudoku-without-guessing/). A pattern that only removes candidates, and needs the complete list to work at all, is covered in [hidden pairs](/learn/hidden-pairs-sudoku/)."
+        "For a board where the full map is the whole point, see [how to solve a hard Sudoku without guessing](/learn/how-to-solve-hard-sudoku-without-guessing/). A pattern that only removes candidates, and needs the complete list to work at all, is covered in [hidden pairs](/learn/hidden-pairs-sudoku/). For how much of a solve those candidate-removing moves account for, see [how to solve Sudoku quickly](/learn/how-to-solve-sudoku-quickly/)."
       ]
     }
   ],
