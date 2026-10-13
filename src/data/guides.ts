@@ -601,4 +601,88 @@ export const guides: Guide[] = [
     { label: "Snyder Notation Sudoku, Sudoku Challenges", url: "https://blog.sudokuchallenges.com/learn-to-play/intermediate-sudoku/snyder-notation-sudoku/" }
   ]
 },
+{
+  slug: "how-to-solve-sudoku-quickly",
+  category: "Sudoku basics",
+  title: "How to solve Sudoku quickly: most of it is placing digits",
+  description: "Across 600 generated boards, hard Sudoku puzzles took 59.6 solver moves and only 4.7 of them removed candidates. The rest is placing digits, which is where a faster solve comes from.",
+  published: "2026-10-13",
+  updated: "2026-10-13",
+  coreSummary: "Almost every move in a Sudoku is a digit going into a square. Across 600 boards from this site's own generator, the solver took 41.0 moves on easy, 51.3 on medium and 59.6 on hard, and even the hard boards spent only 4.7 of those moves removing candidates. Solving faster is mostly about placing digits quickly, not about collecting techniques.",
+  sections: [
+    {
+      heading: "Every square gets filled once",
+      body: [
+        "A Sudoku has 81 squares. Take away the digits printed at the start, and what is left is the number of times you will place a digit. Each empty square gets filled once, and no square gets filled twice.",
+        "How much placing is left depends on the printed digits. Over 200 easy boards this site's generator printed 40 of them on average, which leaves 41 empty squares, and the solver finished those boards in 41 moves. Over 200 medium boards it printed 32, leaving 49 squares, and the solver needed 51.3 moves. Over 200 hard boards it printed 26, leaving 55, and the solver needed 59.6.",
+        "On the easy boards the placement count is exact. Forty-one empty squares, forty-one placements. The extra moves on the medium and hard boards are the ones that write nothing into the grid."
+      ]
+    },
+    {
+      heading: "The moves that remove candidates are rare",
+      body: [
+        "A move that removes candidates crosses a digit out of a square so that a later placement becomes visible. It puts no digit into the grid. These are the moves the technique guides are built around, and on a finished board they are the smallest part of it.",
+        "Easy boards needed none of them. The solver never had to eliminate anything to finish an easy board, because every move it made was a placement. Medium boards averaged 2.3 elimination moves and hard boards 4.7. On a hard board that is under five moves out of about sixty, close to one move in thirteen.",
+        "The technique you have been meaning to learn still matters, because on a hard board the last few squares often wait on one of those eliminations. It is just not where the clock goes.",
+        "These are move counts, not stopwatch times. They show where a board's work sits, not how long any single move takes you, and a slow move costs more than a fast one."
+      ]
+    },
+    {
+      heading: "How much sits on the board",
+      body: [
+        "The other half of the speed problem is how much sits on the board while you look at it. More empty squares and fewer printed digits means more candidates to read on every pass.",
+        "Counting every candidate at the starting position, the same 600 boards carried about 99 on easy, about 159 on medium and about 205 on hard. The board below is a hard board from the site's own generator, seed 1000, with all 200 of its starting candidates written in."
+      ],
+      image: {
+        src: "/images/sudoku-speed-load-1000.svg",
+        alt: "A hard Sudoku board from this site's generator at its starting position, with full pencil marks. The 26 given digits are large and 55 empty squares each carry a list of small candidate digits, 200 in all."
+      }
+    },
+    {
+      heading: "What saves time",
+      body: [
+        "Place what is already on the board. On a hard board 55 of the 59.6 moves are placements, so the move you make most is the one worth practising. Before you hunt for a pattern, look for a square with a single candidate left and put the digit in.",
+        "Eliminations unlock squares, but they are 4.7 of the 59.6 moves on hard and 2.3 of the 51.3 on medium. Reaching for a technique to fill a square is usually reaching past a placement that was already sitting there.",
+        "On an easy board you can skip elimination entirely. The solver finished all 200 easy boards without one elimination move, so when the board is easy the next digit is already on the grid.",
+        "Write less when the board is dense. A hard board starts with about 205 candidates against about 99 on an easy one, more than twice as much to read on the same scan. [Snyder notation](/learn/snyder-notation-sudoku/) is one way to cut what you write down."
+      ]
+    },
+    {
+      heading: "Two habits worth dropping",
+      body: [
+        "Studying technique names is not the same as scanning better. The counts put elimination moves under five per hard board, so time spent learning a fifth elimination pattern buys less than time spent getting quicker at spotting a square with one candidate left.",
+        "Writing every candidate on an easy board is work you will not use. Those boards took no elimination moves at all, so the full list never gets read, and every extra digit is one more thing to check on the next pass."
+      ]
+    },
+    {
+      heading: "What to read next",
+      body: [
+        "If a hard board is stalling you, the guide on [how to solve a hard Sudoku without guessing](/learn/how-to-solve-hard-sudoku-without-guessing/) lists which techniques those boards actually need and how often. For one of the eliminations that does earn its place, see [hidden pairs](/learn/hidden-pairs-sudoku/), and for a pattern that needs the full candidate map, see [X-Wing](/learn/x-wing-sudoku/).",
+        "The numbers above come from the solver behind [the Sudoku game here](/play/sudoku/). Play a hard board with the pencil on, and watch how often you place a digit against how often you cross one out."
+      ]
+    }
+  ],
+  faq: [
+    {
+      question: "How many moves does a Sudoku take?",
+      answer: "Over 200 boards of each level, the counts ran 41.0, 51.3 and 59.6 for easy, medium and hard. Nearly all of those moves are digits going in; the rest are eliminations, and a tougher puzzle only adds a handful of them."
+    },
+    {
+      question: "Is it faster to solve with or without pencil marks?",
+      answer: "Marks cost you writing and save you guesswork. The trade shifts as puzzles get denser, since a hard starting position carries roughly 205 candidates to read, and trimming your marks can pay off there."
+    },
+    {
+      question: "Do I need advanced techniques to solve quickly?",
+      answer: "For the most part, no. The solver's own run needed only 4.7 elimination moves on an average hard puzzle, out of roughly sixty moves total. Techniques matter on the squares that refuse to fall, not across the whole solve."
+    },
+    {
+      question: "Why do hard boards take more moves?",
+      answer: "Because a hard puzzle gives you fewer clues to start with, 26 against 40 for an easy one. That leaves more squares to fill, and it throws in a few eliminations as well."
+    }
+  ],
+  sources: [
+    { label: "Sudoku techniques, Conceptis", url: "https://www.conceptispuzzles.com/index.aspx?uri=puzzle/sudoku/techniques" },
+    { label: "Sudoku Assistant, Solving Techniques, St. Olaf College", url: "https://www.stolaf.edu/people/hansonr/sudoku/explain.htm" }
+  ]
+},
 ];
