@@ -89,7 +89,8 @@ const blocked = noindex || !INDEXABLE;
 					var europe = /^(Europe\/|Atlantic\/(Canary|Madeira|Azores|Faroe|Reykjavik)|Arctic\/Longyearbyen)/.test(tz);
 					var stored = '';
 					try { stored = localStorage.getItem(KEY) || ''; } catch (e) {}
-					var state = stored || (navigator.globalPrivacyControl ? 'denied' : europe ? 'ask' : 'granted');
+					var gpc = !!navigator.globalPrivacyControl;
+					var state = gpc ? 'denied' : (stored || (europe ? 'ask' : 'granted'));
 					var loaded = false;
 
 					function loadAds() {
@@ -128,6 +129,8 @@ const blocked = noindex || !INDEXABLE;
 						if (document.readyState === 'complete') go(); else window.addEventListener('load', go);
 					}
 					function choose(value) {
+						// 2026-10-16: GPC overrides saved grants and consent button actions.
+						if (gpc) value = 'denied';
 						try { localStorage.setItem(KEY, value); } catch (e) {}
 						var bar = document.getElementById('consent-bar');
 						if (bar) bar.hidden = true;
